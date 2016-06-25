@@ -37,8 +37,10 @@ statements:
   - 
     assert: null
     apply: 
-      event_id: "1adccad1-e0f6-4363-bb48-81e424e6ba57"
-      arguments: 
-        - 
-          - "command"
-          - "product"
+      event_id: "eb991bc2-0317-40aa-b3cd-78f3f39e5b27"
+      arguments: []
+      assert: 
+        invariant_id: "57ea0d1c-da4c-46ac-88b2-92b47797456a"
+        comparator: "is"
+        arguments: []
+

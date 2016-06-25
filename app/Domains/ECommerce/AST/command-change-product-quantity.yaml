@@ -1,26 +1,35 @@
-id: "2af65a9c-5a1d-46d0-b2be-5a102da14cab"
+id: "e209a09c-20e2-47d0-a593-f029ab37f362"
 aggregate_id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
-name: "create"
+name: "change-product-quantity"
 children: 
   shopper_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
 statements: 
   - 
     assert: 
-      invariant_id: "fad933eb-b91c-4087-9d42-d2283b5b4ad3"
+      invariant_id: "432c52d6-5473-4b11-acd4-a316a790ca60"
       comparator: "not"
       arguments: []
     apply: null
   - 
+    assert: 
+      invariant_id: "50a735d5-bad4-44c9-b840-b5208bbe0d1a"
+      comparator: "is"
+      arguments:
+        - 
+          - "command"
+          - "product"
+          - "id"
+    apply: null
+  - 
     assert: null
     apply: 
-      event_id: "3961fd8c-a054-41e1-a998-3fc9cfd8f0ad"
+      event_id: "36e9dfe7-49ed-439e-bef0-6615542481d2"
       arguments: 
         - 
           - "command"
-          - "shopper_id"
-  - 
-    assert: 
-      invariant_id: "fad933eb-b91c-4087-9d42-d2283b5b4ad3"
-      comparator: "is"
-      arguments: []
-    apply: null
+          - "product_id"
+        -
+          - "command"
+          - "quantity"
+    
+    
