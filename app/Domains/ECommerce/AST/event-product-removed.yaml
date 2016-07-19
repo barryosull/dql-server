@@ -1,12 +1,12 @@
-name: "product-added"
-id: "1adccad1-e0f6-4363-bb48-81e424e6ba57"
+name: "product-removed"
+id: "4541bd1c-45e8-445f-b65e-540d3211fbd8"
 aggregate_id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
 children: 
   product_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
 statements: 
   - 
     type: "remove_from"
-    property: "list"
+    property: "products"
     value: 
       property: 
         - "product_id"

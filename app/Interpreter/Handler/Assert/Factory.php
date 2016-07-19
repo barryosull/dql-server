@@ -21,7 +21,8 @@ class Factory
     {
         $invariant_ast = $this->ast_repository->fetch($ast->invariant_id);
         $invariant = $this->invariant_factory->ast($invariant_ast);
-        return new Interpreter($invariant, $ast->comparator);
+        $arguments = isset($ast->arguments) ? $ast->arguments : null;
+        return new Interpreter($invariant, $ast->comparator, $arguments);
     }
 }
 

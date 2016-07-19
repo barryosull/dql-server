@@ -2,9 +2,9 @@
 
 class Interpreter
 {
-    private $field;
+    private $left;
     private $comparator;
-    private $value;
+    private $right;
     
     public function __construct($left, $comparator, $right)
     {
@@ -41,11 +41,16 @@ class Interpreter
         }
         
         $property = $ast->property[0];
-        if ($property != 'value') {
-            return $input->$property;
+        if ($property == 'value') {
+            return $input;
         }
         
-        return $input;
+        $value = $input;
+        foreach ($ast->property as $property) {
+            $value = $value->$property;
+        }
+        
+        return $value;
     }
     
     private function is_in_list($list, $value) 

@@ -6,7 +6,7 @@ children:
 statements: 
   - 
     type: "add_to"
-    property: "list"
+    property: "products"
     value: 
       property: 
         - "product"

@@ -33,7 +33,7 @@ DoubleQuotedName = "\"" name:Name "\""
 
 Name = name:[A-Za-z0-9_-]+
   {
-    return join("", $name);
+    return implode("", $name);
   }
 
 _ = [ \t\n\r]*

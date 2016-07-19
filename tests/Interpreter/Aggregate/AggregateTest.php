@@ -4,14 +4,14 @@ use App\Interpreter\Aggregate;
 
 class AggregateTest extends \Test\Interpreter\TestCase
 {
-    private $event_store;
+    private $event_log;
     private $aggregate;
     
     public function setUp()
     {
         parent::setUp();
         
-        $this->event_store = $this->app->make(\App\Interpreter\EventStore::class);
+        $this->event_log = $this->app->make(\App\Interpreter\EventLog::class);
                 
         $this->aggregate = $this->app->make(Aggregate\Aggregate::class);
    
@@ -44,7 +44,7 @@ class AggregateTest extends \Test\Interpreter\TestCase
             ]
         ];
         
-        $this->event_store->store([$event]);
+        $this->event_log->store([$event]);
         
         $entity = $this->aggregate->build_root($this->id, $this->entity_id);
         

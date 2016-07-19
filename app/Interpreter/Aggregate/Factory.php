@@ -2,23 +2,23 @@
 
 use App\Interpreter\Validation;
 use App\Interpreter\Modification;
-use App\Interpreter\EventStore;
+use App\Interpreter\EventLog;
 
 class Factory
 {    
     private $validator;
     private $modification;
-    private $event_store;
+    private $event_log;
  
     public function __construct(
         Validation\Validator $validator,
         Modification\Modifier $modification,
-        EventStore $event_store
+        EventLog $event_log
     )
     {
         $this->validator = $validator;
         $this->modification = $modification;
-        $this->event_store = $event_store;
+        $this->event_log = $event_log;
     }
     
     public function ast($ast)
@@ -27,7 +27,7 @@ class Factory
             $ast,
             $this->validator,
             $this->modification,
-            $this->event_store
+            $this->event_log
         );
     }
 }

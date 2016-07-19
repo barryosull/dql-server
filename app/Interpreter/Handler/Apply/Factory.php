@@ -34,12 +34,15 @@ class Factory
         $event_ast = $this->event_repository->fetch($ast->event_id);
 
         $event_interpreter = $this->event_factory->ast($event_ast);
+        
+        $arguments = isset($ast->arguments) ? $ast->arguments : null;
                
         return new Interpreter(
             $event_interpreter, 
             $assert_interpreter, 
             $ast->event_id, 
-            $this->event_handlers
+            $this->event_handlers,
+            $arguments
         );
     }   
 }

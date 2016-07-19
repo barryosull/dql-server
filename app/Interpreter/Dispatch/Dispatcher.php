@@ -2,26 +2,27 @@
 
 use App\Interpreter\Handler;
 use App\Interpreter\Aggregate;
-use App\Interpreter\EventStore;
+use App\Interpreter\EventLog;
 use App\Interpreter\CommandStore;
 
 class Dispatcher
 {
     private $handler;
     private $aggregate_root_builder;
-    private $event_store;
+    private $event_log;
     private $command_store;
+    private $root_entity;
     
     public function __construct( 
         Handler\Handler $handler,
         Aggregate\Aggregate $aggregate_root_builder,
-        EventStore $event_store,
+        EventLog $event_log,
         CommandStore $command_store
     )
     {
         $this->handler = $handler;
         $this->aggregate_root_builder = $aggregate_root_builder;
-        $this->event_store = $event_store;
+        $this->event_log = $event_log;
         $this->command_store = $command_store;
     }
         
@@ -29,7 +30,7 @@ class Dispatcher
     {                
         $events = $this->handle_command($command);
 
-        $this->event_store->store($events);
+        $this->event_log->store($events);
         $this->command_store->store([$command]);
         
         return $events;
@@ -37,10 +38,10 @@ class Dispatcher
     
     private function handle_command($command)
     {
-        $root_entity = $this->build_root_adapter($command);
+        $this->root_entity = $this->build_root_adapter($command);
 
-        $events = $this->handle_command_adapter($command, $root_entity);
-        
+        $events = $this->handle_command_adapter($command, $this->root_entity);
+                
         return $this->decorate_events_with_command_id($events, $command);
     }
     

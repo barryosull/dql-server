@@ -1,0 +1,12 @@
+id: "dd7a3027-323c-484d-afc5-a9c6eb166221"
+name: "boolean"
+check: 
+  condition: 
+    - 
+      value_left: 
+        property: 
+          - "value"
+      comparator: "is"
+      value_right: 
+        validator: "boolType"
+        arguments: []

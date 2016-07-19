@@ -1,6 +1,10 @@
 {
   "id": "21c75b22-63ab-469e-8535-e11cb551522b",
   "query": null,
+  "parameters": {
+    "shopper_id": "a6a70ade-d3be-42ba-bf6d-c29d055e862e",
+    "is_created": "dd7a3027-323c-484d-afc5-a9c6eb166221"
+  },
   "check": {
     "condition": [{      
         "value_left": {

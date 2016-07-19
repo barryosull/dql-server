@@ -601,7 +601,7 @@ class GeneratedParser{
     $this->peg_c18 = "/^[A-Za-z0-9_-]/";
     $this->peg_c19 = array( "type" => "class", "value" => "[A-Za-z0-9_\\-]", "description" => "[A-Za-z0-9_\\-]" );
     $this->peg_c20 = function($name) {
-        return join("", $name);
+        return implode("", $name);
       };
     $this->peg_c21 = "/^[ \\t\\n\\r]/";
     $this->peg_c22 = array( "type" => "class", "value" => "[ \\t\\n\\r]", "description" => "[ \\t\\n\\r]" );

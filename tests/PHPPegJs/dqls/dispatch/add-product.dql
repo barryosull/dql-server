@@ -1,8 +1,7 @@
-dispatch command 'add-product' (product)
+dispatch command 'add-product' (entity\product)
 	as (
-		entity\product(
-			'af424258-3523-4a2c-b676-38c3b15bb5cc', 
-			5
-		)
+        (value\id, value\quantity)
+        as
+        ('af424258-3523-4a2c-b676-38c3b15bb5cc', 5)
 	)
 	identifier '3a97e3ea-4781-4c33-92bf-3b3f10cdcce0';

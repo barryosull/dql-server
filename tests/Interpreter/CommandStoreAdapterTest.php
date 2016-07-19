@@ -29,7 +29,8 @@ class CommandStoreAdapterTest extends TestCase
             ],
             "domain"=> (object)[
                 "aggregate_id"=> "ff3a666b-4288-4ecd-86d7-7f511a2fd378",
-                'payload'=> (object)['data'=>true]
+                'payload'=> (object)['data'=>true],
+                'occured_at'=> '2013-01-01 00:00:00'
             ]
         ];
     }
@@ -40,6 +41,7 @@ class CommandStoreAdapterTest extends TestCase
         $this->builder->set_aggregate_id($command->domain->aggregate_id)
             ->set_schema_command_id($command->schema->id)
             ->set_schema_aggregate_id($command->schema->aggregate_id)
+            ->set_occured_at($command->domain->occured_at)
             ->set_payload($command->domain->payload);
         
         $transformed = $this->builder->build();

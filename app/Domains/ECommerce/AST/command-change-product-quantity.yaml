@@ -2,7 +2,8 @@ id: "e209a09c-20e2-47d0-a593-f029ab37f362"
 aggregate_id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
 name: "change-product-quantity"
 children: 
-  shopper_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
+  product_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
+  quantity: "c8a17789-448b-473a-aea1-514b1b2af202"
 statements: 
   - 
     assert: 
@@ -17,8 +18,7 @@ statements:
       arguments:
         - 
           - "command"
-          - "product"
-          - "id"
+          - "product_id"
     apply: null
   - 
     assert: null

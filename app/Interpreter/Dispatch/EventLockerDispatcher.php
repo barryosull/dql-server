@@ -1,7 +1,7 @@
 <?php namespace App\Interpreter\Dispatch;
 
-use App\EventStore\EventStreamLocker;
-use App\EventStore\StreamID;
+use App\EventLog\EventStreamLocker;
+use App\EventLog\StreamID;
 use App\Interpreter\Dispatch;
 
 class EventLockerDispatcher
@@ -25,9 +25,9 @@ class EventLockerDispatcher
         $stream_id = new StreamID($schema_id, $domain_id);
         try {
             $this->event_stream_locker->lock($stream_id);
-            $events = $this->dispatcher->dispatch($command);
+            $result = $this->dispatcher->dispatch($command);
             $this->event_stream_locker->unlock($stream_id);
-            return $events;
+            return $result;
         } catch (\Exception $ex) {
             $this->event_stream_locker->unlock($stream_id);
             throw $ex;

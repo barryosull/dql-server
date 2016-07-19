@@ -3,16 +3,18 @@
 class SimpleInterpreter
 {    
     private $check;
+    private $name;
     
-    public function __construct($check)
+    public function __construct($check, $name="")
     {
         $this->check = $check;
+        $this->name = $name;
     }
     
     public function validate($value)
     { 
         if (!$this->check->check($value)) {
-            throw new ValueException();
+            throw new ValueException("'$value' is not a valid value");
         }
         return $value;
     }

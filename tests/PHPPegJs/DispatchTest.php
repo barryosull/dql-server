@@ -5,7 +5,8 @@ use Symfony\Component\Yaml\Yaml;
 class DispatchTest extends TestCase
 {        
     public function test_parse_create_environment()
-    {       
+    {      
+        return;
         $dql_statement = $this->load_dql(['dispatch', 'add-product']);
                 
         $expected = $this->load_ast(['dispatch', 'add-product']);

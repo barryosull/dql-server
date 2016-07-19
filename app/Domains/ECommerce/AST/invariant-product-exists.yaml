@@ -1,12 +1,15 @@
 id: "50a735d5-bad4-44c9-b840-b5208bbe0d1a"
+name: "product-exists"
+parameters: 
+  product_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
 query: null
 check: 
   condition: 
     - 
       value_left: 
         property: 
-          - "list"
+          - "products"
       comparator: "exists_in"
       value_right: 
         property: 
-          - "entity_id"
+          - "product_id"

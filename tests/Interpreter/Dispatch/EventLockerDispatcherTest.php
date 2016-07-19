@@ -2,7 +2,7 @@
 
 use App\Interpreter\Handler\Invariant;
 use App\Interpreter\Dispatch\EventLockerDispatcher;
-use App\EventStore\StreamID;
+use App\EventLog\StreamID;
 
 class EventLockerDispatcherTest extends \Test\Interpreter\TestCase
 {
@@ -17,7 +17,7 @@ class EventLockerDispatcherTest extends \Test\Interpreter\TestCase
         parent::setUp();
         
         $this->stub_dispatch_interpreter = $this->stub(\App\Interpreter\Dispatch\Dispatcher::class);
-        $this->mock_locker = $this->mock(\App\EventStore\EventStreamLocker::class);
+        $this->mock_locker = $this->mock(\App\EventLog\EventStreamLocker::class);
         
         $this->event_locker_dispatcher = new EventLockerDispatcher(
             $this->mock_locker->reveal(),

@@ -17,7 +17,7 @@ class CompositeInterpreter
         $result = new \stdClass();
         foreach ($this->keys as $index=>$key) {
             if (!isset($object->$key)) {
-                throw new PropertyException();
+                throw new PropertyException("Property '$key' is missing from data");
             }
             $sub_value = $object->$key;
             $result->$key = $this->interpreters[$index]->validate($sub_value);

@@ -13,7 +13,7 @@ class Factory
     
     public function ast($ast)
     {
-        return new Interpreter($ast->id, $ast->aggregate_id, $this->validator);
+        return new Interpreter($ast->id, $ast->aggregate_id, $this->validator, $ast->children);
     }
 }
 

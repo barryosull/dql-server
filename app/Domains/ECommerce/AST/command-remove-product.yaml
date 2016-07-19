@@ -1,8 +1,8 @@
-id: "2af65a9c-5a1d-46d0-b2be-5a102da14cab"
+id: "d0f0520a-88af-48dd-88bb-73dd68e40114"
 aggregate_id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
-name: "create"
+name: "remove-product"
 children: 
-  shopper_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
+  product_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
 statements: 
   - 
     assert: 
@@ -17,13 +17,12 @@ statements:
       arguments:
         - 
           - "command"
-          - "product"
-          - "id"
+          - "product_id"
     apply: null
   - 
     assert: null
     apply: 
-      event_id: "1adccad1-e0f6-4363-bb48-81e424e6ba57"
+      event_id: "4541bd1c-45e8-445f-b65e-540d3211fbd8"
       arguments: 
         - 
           - "command"

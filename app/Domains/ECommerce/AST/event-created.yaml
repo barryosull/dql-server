@@ -9,3 +9,9 @@ statements:
     property: "is_created"
     value: 
       literal: true
+  - 
+    type: "set"
+    property: "shopper_id"
+    value: 
+      property: 
+        - "shopper_id"

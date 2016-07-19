@@ -1,5 +1,10 @@
 name: cart
-id: "74facf4b-0a6e-4525-aecb-6c794129856d"
-children: 
- id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
- is_created: "dd7a3027-323c-484d-afc5-a9c6eb166221"
+id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
+root: 
+  entity_id: "74facf4b-0a6e-4525-aecb-6c794129856d"
+  defaults:
+    is_created: false
+    shopper_id: "00000000-0000-4000-B000-000000000000"
+    products: []
+    checked_out: false
+   

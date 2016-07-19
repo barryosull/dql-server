@@ -6,7 +6,7 @@ check:
     - 
       value_left: 
         property: 
-          - "list"
+          - "products"
       comparator: "is"
       value_right: 
         validator: "count"

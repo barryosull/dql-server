@@ -8,7 +8,6 @@ class CommandRepository implements \App\CommandStore\CommandRepository
 {
     private $pdo;
     private $builder;
-    private $stream_select_statement;
     private $all_select_statement;
     
     public function __construct(PDO $pdo, CommandBuilder $builder)

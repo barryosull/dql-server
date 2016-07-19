@@ -7,7 +7,7 @@ class DispatcherTest extends \Test\Interpreter\TestCase
 {
     private $command;
     private $dispatcher;
-    private $event_store;
+    private $event_log;
     private $command_store;
     private $command_id;
 
@@ -15,8 +15,8 @@ class DispatcherTest extends \Test\Interpreter\TestCase
     {
         parent::setUp();
                 
-        $this->event_store = $this->app->make(\App\Interpreter\EventStore::class);
-        $this->event_store->clear();
+        $this->event_log = $this->app->make(\App\Interpreter\EventLog::class);
+        $this->event_log->clear();
         
         $this->command_store = $this->app->make(\App\Interpreter\CommandStore::class);
         
@@ -41,13 +41,13 @@ class DispatcherTest extends \Test\Interpreter\TestCase
     {
         $events = $this->dispatcher->dispatch($this->command);
         
-        $this->assertEquals($events, $this->event_store->fetch('', ''));
+        $this->assertEquals($events, $this->event_log->fetch('', ''));
     }
     
     public function test_events_are_decorated_with_aggregate_id()
     {
         $events = $this->dispatcher->dispatch($this->command);
-        
+
         foreach ($events as $event) {
             $this->assertEquals($this->command_id, $event->domain->command_id);
         }
@@ -60,7 +60,7 @@ class DispatcherTest extends \Test\Interpreter\TestCase
         $this->setExpectedException(Invariant\Exception::class);
         
         // This command has been run once, if the events are replayed successfully, 
-        // then replaying it again will break it
+        // then replaying it again will break an invariant, causing a failure
         $this->dispatcher->dispatch($this->command);
     } 
     

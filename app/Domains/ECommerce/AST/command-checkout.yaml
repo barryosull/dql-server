@@ -1,8 +1,7 @@
 id: "b1be3927-3468-4e12-9293-21214da121be"
 aggregate_id: "01f99d4f-4cc7-4125-96fd-11f7dcbe8f9a"
 name: "checkout"
-children: 
-  shopper_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
+children: []
 statements: 
   - 
     assert: 

@@ -16,10 +16,24 @@ class Interpreter
         $this->ast = $ast;
     }
     
-    public function check($root, $command=null)
+    public function check($root, $arguments=null)
     { 
-        $data = $this->querier->query($this->ast->id, $root, $command);
-        return $this->validator->check($this->ast->id, $data, $command);
+        $parameters = $this->build_parameters($arguments);
+        $data = $this->querier->query($this->ast->id, $root, $parameters);
+        return $this->validator->check($this->ast->id, $data, $parameters);
+    }
+    
+    private function build_parameters($arguments)
+    {
+        $parameters = new \stdClass();
+        if (!isset($this->ast->parameters)) {
+            return $parameters;
+        }
+        foreach ($this->ast->parameters as $key=>$type_id) {
+            $parameters->$key = current($arguments);
+            next($arguments);
+        }
+        return $parameters;
     }
 }
 

@@ -20,6 +20,7 @@ class CommandStore implements \App\Interpreter\CommandStore
             $this->builder->set_aggregate_id($command->domain->aggregate_id)
                 ->set_schema_command_id($command->schema->id)
                 ->set_schema_aggregate_id($command->schema->aggregate_id)
+                ->set_occured_at($command->domain->occured_at)
                 ->set_payload($command->domain->payload);
             
             return $this->builder->build();

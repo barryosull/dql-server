@@ -17,7 +17,7 @@ class Factory
     public function ast($ast)
     {
         if (isset($ast->check)) {
-           return new SimpleInterpreter($this->check_factory->ast($ast->check));
+            return new SimpleInterpreter($this->check_factory->ast($ast->check));
         }
         if (isset($ast->children)) {
            return $this->make_composite($ast);

@@ -33,4 +33,23 @@ class CompareTest extends \Test\Interpreter\TestCase
         
         $this->assertFalse($this->interpreter->check((object)['is_created'=>false]));
     }
+    
+    public function test_can_handle_tiered_list_properties()
+    {
+        $ast = $this->fake_ast_repo->invariant();
+        
+        //Update invariant to use list of properties
+        $ast->check->condition[0]->value_left->property = ["user", "is_created"];
+               
+        $this->factory = $this->app->make(Compare\Factory::class);
+        $this->interpreter = $this->factory->ast($ast->check->condition[0]);
+        
+        $object = (object)[
+            'user'=>(object)[
+                'is_created'=>false
+            ]
+        ];
+        
+        $this->assertFalse($this->interpreter->check($object));
+    }
 }

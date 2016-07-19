@@ -46,5 +46,10 @@ class InterpreterTest extends \Test\Interpreter\TestCase
         $root->is_created = true;
       
         $this->interpreter->handle($root, $this->command());
-    }    
+    }  
+    
+    public function test_parses_arguments()
+    {
+        
+    }
 }

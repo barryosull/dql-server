@@ -19,4 +19,10 @@ Route::get('dql/form', function(){
    return view('dql/form'); 
 });
 
+Route::get('dql/command-form', function(){
+    $aggregate_id = \Ramsey\Uuid\Uuid::uuid4()->toString();
+    return view('dql/command-form', ['aggregate_id'=>$aggregate_id]); 
+});
+
 Route::post('dql/command', 'DQLController@command');
+Route::post('dql/command-dispatch', 'DQLController@command_dispatch');
