@@ -1,0 +1,67 @@
+create domain 'Modeling';
+create context 'schema' for domain 'Modeling';
+
+for domain 'Modeling' in context 'schema';
+
+create value 'name' validated by (
+	<:
+		check 
+			value is alphanumberic 
+			and value is not blank 
+	:>
+);
+
+create aggregate 'environment';
+
+# Create
+within aggregate 'environment':
+{
+	create boolean 'is_created' defaults (true);
+
+	create invariant 'created' satisfied by (
+		<:
+			from aggregate
+			check is_created == true
+		:>
+	);
+
+	create name 'name';
+
+	create event 'created' (name) as (name) handled by (
+		<:
+			update aggregate
+				set 'name' = name
+		:>
+	);
+};
+
+within aggregate 'environment':
+{
+	create invariant 'name-already-used' (name) as (name) satisfied by (
+		<:
+			from all
+				count as name_count
+			where name == name
+			check name_count > 0
+		:>
+	);
+};
+
+within aggregate 'environment':
+{
+	create command 'create' (name) as (name) handled by (
+		<{
+			assert invariant not 'created';
+			assert invariant not 'name-already-used' (command.name);
+
+			apply event 'created' (command.name);
+		}>
+	);
+
+	create command 'using' handled by (
+		<{
+			assert invariant 'created';
+			apply event 'used';
+		}>
+	);
+};
