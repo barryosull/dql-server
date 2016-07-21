@@ -155,6 +155,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
+        BoundedContext\Laravel\Providers\BoundedContextProvider::class,
 
     ],
 

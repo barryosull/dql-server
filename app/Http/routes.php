@@ -24,5 +24,7 @@ Route::get('dql/command-form', function(){
     return view('dql/command-form', ['aggregate_id'=>$aggregate_id]); 
 });
 
-Route::post('dql/command', 'DQLController@command');
+
 Route::post('dql/command-dispatch', 'DQLController@command_dispatch');
+
+Route::post('api/command', 'DQLController@command');

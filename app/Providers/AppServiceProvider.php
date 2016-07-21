@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -71,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
             \Infrastructure\App\CommandStore\LaravelAdapter\CommandRepository::class  
         );
         
-        /** Queryier **/
+        /** Querier **/
         $this->app->bind(
             \App\Interpreter\Query\Factory::class,
             \App\Interpreter\Query\LaravelFactory::class

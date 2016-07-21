@@ -5,9 +5,10 @@ use BoundedContext\Contracts\Event\Snapshot\Snapshot;
 
 use Domain\Modeling\Schema\Aggregate\Environment\Event;
 
+/** @id 121837f2-6b4a-4450-855a-94bc23d2db49 */
 class Projector extends AbstractProjector
 {
-    protected function when_ddd_schema_environment_created(
+    protected function when_modeling_schema_environment_created(
         Projection $projection,
         Event\Created $event,
         Snapshot $snapshot

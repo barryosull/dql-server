@@ -1,10 +1,11 @@
 <?php namespace Domain\Modeling\Schema\Aggregate\Environment\Event;
 
 use BoundedContext\Contracts\Event\Event;
-use EventSourced\ValueObject\ValueObject\Uuid;
 use BoundedContext\Event\AbstractEvent;
+use EventSourced\ValueObject\ValueObject\Uuid;
 use Domain\Modeling\Schema\ValueObject\Name;
 
+/** @id cfd9ef79-2cf3-4ee6-805f-619f72352921 */
 class Created extends AbstractEvent implements Event
 {
     public $name;
