@@ -3,12 +3,12 @@
 return [
 
     'application' => [
-        \App\Projections\Environment\Projection::class =>
-            \Infrastructure\App\Projections\Environment\Projection::class,
+        \App\Projections\Database\Projection::class =>
+            \Infrastructure\App\Projections\Database\Projection::class,
     ],
 
     'domain' => [
-        \Domain\DDD\Schema\Aggregate\Environment\Projection\NameAlreadyInUse\Projection::class =>
-            \Infrastructure\Domain\DDD\Schema\Aggregate\Environment\Projection\NameAlreadyInUse\Projection::class
+        \Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class =>
+            \Infrastructure\Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class
     ],
 ];

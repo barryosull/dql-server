@@ -1,8 +1,8 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment\Invariant;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database\Invariant;
 
 use BoundedContext\Business\Invariant\AbstractInvariant;
 use BoundedContext\Contracts\Business\Invariant\Invariant;
-use Domain\Modeling\Schema\Aggregate\Environment\Projection\NameAlreadyInUse\Queryable;
+use Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Queryable;
 use Domain\Modeling\Schema\ValueObject\Name;
 
 class NameAlreadyInUse extends AbstractInvariant implements Invariant

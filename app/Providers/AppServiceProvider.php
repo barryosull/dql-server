@@ -75,5 +75,16 @@ class AppServiceProvider extends ServiceProvider
             \App\Interpreter\Query\Factory::class,
             \App\Interpreter\Query\LaravelFactory::class
         );
+        
+        /** Domain projections */
+        $this->app->bind(
+            \Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class,
+                \Infrastructure\Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class
+        );
+        
+        $this->app->bind(
+            \Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Queryable::class,
+                \Infrastructure\Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Queryable::class
+        );
     }
 }

@@ -7,8 +7,9 @@ use App\DQLParser;
 
 use BoundedContext\Laravel\Bus;
 use Domain\Modeling\Schema\ValueObject;
-use Domain\Modeling\Schema\Aggregate\Environment;
+use Domain\Modeling\Schema\Aggregate\Database;
 use BoundedContext\Laravel\Generator\Uuid;
+use BoundedContext\Contracts\Business\Invariant;
 
 class DQLController extends Controller 
 {
@@ -32,17 +33,20 @@ class DQLController extends Controller
             $ast = $parser->parse($statement);
             $command = $this->make_command_from_ast($ast);
             $this->modeling_dispatcher->dispatch($command);
+
         } catch (DQLParser\ParserError $ex) {
             return Response::create($ex->getMessage(), 400);
+        } catch (Invariant\Exception $ex) {
+            return Response::create($ex->getMessage(), 400);
         }
-        return "Success";
+        return $command->id()->value();
     }
     
     private function make_command_from_ast($ast)
     {
         $id = (new Uuid())->generate();
         $name = new ValueObject\Name($ast->value);
-        return new Environment\Command\Create($id, $name);  
+        return new Database\Command\Create($id, $name);  
     }
     
     public function command_dispatch(Request $request)

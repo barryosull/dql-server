@@ -1,14 +1,14 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment\Upgrader\Event;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database\Upgrader\Command;
 
 use BoundedContext\Contracts\Schema\Schema;
 use BoundedContext\Contracts\Schema\Upgrader;
 use BoundedContext\Schema\Upgrader\AbstractUpgrader;
 
-class Created extends AbstractUpgrader implements Upgrader
+class Create extends AbstractUpgrader implements Upgrader
 {
     protected function when_version_0(Schema $schema)
     {
-        $schema->add('cart', function($name) {
+        $schema->add('name', function($name) {
             return '';
         });
     }

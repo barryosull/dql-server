@@ -1,4 +1,4 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment\Event;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database\Event;
 
 use BoundedContext\Contracts\Event\Event;
 use BoundedContext\Event\AbstractEvent;

@@ -1,4 +1,4 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database;
 
 use BoundedContext\Contracts\Projection\Projection as ProjectionContract;
 use BoundedContext\Contracts\Projection\Queryable as QueryableContract;

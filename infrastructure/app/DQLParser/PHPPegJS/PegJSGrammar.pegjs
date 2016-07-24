@@ -1,20 +1,20 @@
 
-Command = CreateEnvironment / UsingEnvironment
+Command = CreateDatabase / UsingDatabase 
 
-CreateEnvironment = _ "create" _ "environment" _ value:QuotedName _ ";" _
+CreateDatabase = _ "create" _ "database" _ value:QuotedName _ ";" _
   {
     return [
       'type' => 'command',
-      'name' => 'CreateEnvironment',
+      'name' => 'CreateDatabase',
       'value' => $value
     ];
   }
 
-UsingEnvironment = _ "using" _ "environment" _ value:QuotedName _ ";" _
+UsingDatabase = _ "using" _ "database" _ value:QuotedName _ ";" _
   {
     return [
       'type' => 'command',
-      'name' => 'UsingEnvironment',
+      'name' => 'UsingDatabase',
       'value' => $value
     ];
   }

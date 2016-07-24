@@ -235,15 +235,15 @@ class GeneratedParser{
 
     private function peg_parseCommand() {
 
-      $s0 = $this->peg_parseCreateDatabase();
+      $s0 = $this->peg_parseCreateEnvironment();
       if ($s0 === $this->peg_FAILED) {
-        $s0 = $this->peg_parseUsingDatabase();
+        $s0 = $this->peg_parseUsingEnvironment();
       }
 
       return $s0;
     }
 
-    private function peg_parseCreateDatabase() {
+    private function peg_parseCreateEnvironment() {
 
       $s0 = $this->peg_currPos;
       $s1 = $this->peg_parse_();
@@ -258,9 +258,9 @@ class GeneratedParser{
         if ($s2 !== $this->peg_FAILED) {
           $s3 = $this->peg_parse_();
           if ($s3 !== $this->peg_FAILED) {
-            if (mb_substr($this->input, $this->peg_currPos, 8, "UTF-8") === $this->peg_c3) {
+            if (mb_substr($this->input, $this->peg_currPos, 11, "UTF-8") === $this->peg_c3) {
               $s4 = $this->peg_c3;
-              $this->peg_currPos += 8;
+              $this->peg_currPos += 11;
             } else {
               $s4 = $this->peg_FAILED;
               if ($this->peg_silentFails === 0) { $this->peg_fail($this->peg_c4); }
@@ -325,7 +325,7 @@ class GeneratedParser{
       return $s0;
     }
 
-    private function peg_parseUsingDatabase() {
+    private function peg_parseUsingEnvironment() {
 
       $s0 = $this->peg_currPos;
       $s1 = $this->peg_parse_();
@@ -340,9 +340,9 @@ class GeneratedParser{
         if ($s2 !== $this->peg_FAILED) {
           $s3 = $this->peg_parse_();
           if ($s3 !== $this->peg_FAILED) {
-            if (mb_substr($this->input, $this->peg_currPos, 8, "UTF-8") === $this->peg_c3) {
+            if (mb_substr($this->input, $this->peg_currPos, 11, "UTF-8") === $this->peg_c3) {
               $s4 = $this->peg_c3;
-              $this->peg_currPos += 8;
+              $this->peg_currPos += 11;
             } else {
               $s4 = $this->peg_FAILED;
               if ($this->peg_silentFails === 0) { $this->peg_fail($this->peg_c4); }
@@ -567,14 +567,14 @@ class GeneratedParser{
     $this->peg_c0 = $this->peg_FAILED;
     $this->peg_c1 = "create";
     $this->peg_c2 = array( "type" => "literal", "value" => "create", "description" => "\"create\"" );
-    $this->peg_c3 = "database";
-    $this->peg_c4 = array( "type" => "literal", "value" => "database", "description" => "\"database\"" );
+    $this->peg_c3 = "environment";
+    $this->peg_c4 = array( "type" => "literal", "value" => "environment", "description" => "\"environment\"" );
     $this->peg_c5 = ";";
     $this->peg_c6 = array( "type" => "literal", "value" => ";", "description" => "\";\"" );
     $this->peg_c7 = function($value) {
         return [
           'type' => 'command',
-          'name' => 'CreateDatabase',
+          'name' => 'CreateEnvironment',
           'value' => $value
         ];
       };
@@ -583,14 +583,14 @@ class GeneratedParser{
     $this->peg_c10 = function($value) {
         return [
           'type' => 'command',
-          'name' => 'UsingDatabase',
+          'name' => 'UsingEnvironment',
           'value' => $value
         ];
       };
     $this->peg_c11 = "'";
     $this->peg_c12 = array( "type" => "literal", "value" => "'", "description" => "\"'\"" );
     $this->peg_c13 = function($name) {
-        return $name; 
+        return $name;
       };
     $this->peg_c14 = "\"";
     $this->peg_c15 = array( "type" => "literal", "value" => "\"", "description" => "\"\\\"\"" );

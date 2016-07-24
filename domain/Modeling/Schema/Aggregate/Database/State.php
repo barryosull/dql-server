@@ -1,4 +1,4 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database;
 
 use BoundedContext\Sourced\Aggregate\State\AbstractState;
 

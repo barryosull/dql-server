@@ -1,4 +1,4 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment\Projection\NameAlreadyInUse;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse;
 
 use Domain\Modeling\Schema\ValueObject\Name;
 

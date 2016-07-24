@@ -1,4 +1,4 @@
-<?php namespace Domain\Modeling\Schema\Aggregate\Environment\Command;
+<?php namespace Domain\Modeling\Schema\Aggregate\Database\Command;
 
 use BoundedContext\Command\AbstractCommand;
 use BoundedContext\Contracts\Command\Command;
