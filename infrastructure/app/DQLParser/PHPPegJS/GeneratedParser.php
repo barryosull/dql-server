@@ -248,8 +248,8 @@ class GeneratedParser{
       $s0 = $this->peg_currPos;
       $s1 = $this->peg_parse_();
       if ($s1 !== $this->peg_FAILED) {
-        if (mb_substr($this->input, $this->peg_currPos, 6, "UTF-8") === $this->peg_c1) {
-          $s2 = $this->peg_c1;
+        if (mb_strtolower(mb_substr($this->input, $this->peg_currPos, 6, "UTF-8"), "UTF-8") === $this->peg_c1) {
+          $s2 = mb_substr($this->input, $this->peg_currPos, 6, "UTF-8");
           $this->peg_currPos += 6;
         } else {
           $s2 = $this->peg_FAILED;
@@ -258,8 +258,8 @@ class GeneratedParser{
         if ($s2 !== $this->peg_FAILED) {
           $s3 = $this->peg_parse_();
           if ($s3 !== $this->peg_FAILED) {
-            if (mb_substr($this->input, $this->peg_currPos, 8, "UTF-8") === $this->peg_c3) {
-              $s4 = $this->peg_c3;
+            if (mb_strtolower(mb_substr($this->input, $this->peg_currPos, 8, "UTF-8"), "UTF-8") === $this->peg_c3) {
+              $s4 = mb_substr($this->input, $this->peg_currPos, 8, "UTF-8");
               $this->peg_currPos += 8;
             } else {
               $s4 = $this->peg_FAILED;

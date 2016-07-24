@@ -1,7 +1,7 @@
 
 Command = CreateDatabase / UsingDatabase 
 
-CreateDatabase = _ "create" _ "database" _ value:QuotedName _ ";" _
+CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
     return [
       'type' => 'command',
