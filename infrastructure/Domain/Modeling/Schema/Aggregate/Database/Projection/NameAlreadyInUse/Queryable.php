@@ -6,7 +6,7 @@ use BoundedContext\Laravel\Illuminate\Projection\AbstractQueryable;
 
 class Queryable extends AbstractQueryable implements NameAlreadyInUse\Queryable
 {
-    protected $table = 'domain_modeling_schema_database_name_already_in_use';
+    protected $table = 'app_modeling_name_to_id';
     
     public function name_already_in_use(Name $name) 
     {

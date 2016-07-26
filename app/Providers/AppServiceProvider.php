@@ -86,5 +86,16 @@ class AppServiceProvider extends ServiceProvider
             \Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Queryable::class,
                 \Infrastructure\Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Queryable::class
         );
+        
+        /** Application projections */
+        $this->app->bind(
+            \App\Projection\ID\Projection::class,
+                \Infrastructure\App\Projection\ID\Projection::class
+        );
+        
+        $this->app->bind(
+            \App\Projection\ID\Queryable::class,
+                \Infrastructure\App\Projection\ID\Queryable::class
+        );
     }
 }

@@ -6,7 +6,7 @@ use Domain\Modeling\Schema\ValueObject\Name;
 
 class Projection extends AbstractProjection implements NameAlreadyInUse\Projection
 {
-    protected $table = 'domain_modeling_schema_database_name_already_in_use';
+    protected $table = 'app_modeling_name_to_id';
 
     /** @var Queryable $queryable */
     protected $queryable;
