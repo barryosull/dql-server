@@ -4,8 +4,17 @@ Command = CreateDatabase / UsingDatabase
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
     return [
-      'type' => 'command',
+      'type' => 'modeling',
       'name' => 'CreateDatabase',
+      'value' => $value
+    ];
+  }
+
+RenameDatabase = _ "rename"i _ "database"i _ value:QuotedName _ ";" _
+  {
+    return [
+      'type' => 'modeling',
+      'name' => 'RenameDatabase',
       'value' => $value
     ];
   }
@@ -13,7 +22,7 @@ CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
 UsingDatabase = _ "using" _ "database" _ value:QuotedName _ ";" _
   {
     return [
-      'type' => 'command',
+      'type' => 'modeling',
       'name' => 'UsingDatabase',
       'value' => $value
     ];

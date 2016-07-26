@@ -11,4 +11,12 @@ interface Projection extends \BoundedContext\Contracts\Projection\Projection
      * @return void
      */
     public function create(Name $name);
+    
+    /**
+     * Adds a new name
+     *
+     * @param Name $name
+     * @return void
+     */
+    public function rename(Name $previous_name, Name $name);
 }

@@ -42,11 +42,11 @@ class ParserGenerator
                 
         $result_array = [];
         $return_var = 0;
+        
+        $script_path = base_path('node_modules/peg-php-parser-generator/script/generate.js');
                 
-        //$grammar_path_hack = base_path('infrastructure/app/DQLParser/PHPPegJS/PegJSGrammar.pegjs');
-  
         $this->command_line->execute(
-            "node node_modules/peg-php-parser-generator/script/generate.js $path_to_grammar", 
+            "node $script_path $path_to_grammar", 
             $result_array, 
             $return_var
         );

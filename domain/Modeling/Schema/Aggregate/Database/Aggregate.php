@@ -15,12 +15,30 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
 
         $this->check->that(Invariant\NameAlreadyInUse::class)
             ->assuming([$command->name])
+            ->not()
             ->asserts();
 
         /* ---------------- */
 
         $this->apply(new Event\Created(
             $command->id(),
+            $command->name
+        ));
+    }
+    
+    protected function handle_renamed(Command\Rename $command)
+    {
+        $this->check->that(Invariant\Created::class)
+            ->asserts();
+
+        $this->check->that(Invariant\NameAlreadyInUse::class)
+            ->assuming([$command->name])
+            ->not()
+            ->asserts();
+        
+        $this->apply(new Event\Renamed(
+            $command->id(),
+            $this->state()->queryable()->name,
             $command->name
         ));
     }

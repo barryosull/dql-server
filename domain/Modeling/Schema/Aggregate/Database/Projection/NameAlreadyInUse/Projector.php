@@ -16,4 +16,13 @@ class Projector extends AbstractProjector
     {
         $projection->create($event->name);
     }
+    
+    protected function when_modeling_schema_database_renamed(
+        Projection $projection,
+        Event\Renamed $event,
+        Snapshot $snapshot
+    )
+    {
+        $projection->rename($event->previous_name, $event->name);
+    }
 }

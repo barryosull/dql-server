@@ -16,7 +16,7 @@ class NameAlreadyInUse extends AbstractInvariant implements Invariant
     
     protected function satisfier(Queryable $queryable)
     {
-        return (!$queryable->name_already_in_use(
+        return ($queryable->name_already_in_use(
             $this->name
         ));
     }

@@ -8,9 +8,7 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
 {
     protected $table = 'domain_modeling_schema_database_name_already_in_use';
 
-    /**
-     * @var Queryable $queryable
-     */
+    /** @var Queryable $queryable */
     protected $queryable;
     
     public function create(Name $name) 
@@ -19,4 +17,16 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
             'name' => $name->value()
         ]);
     }
+
+    public function rename(Name $previous_name, Name $name)
+    {
+        $this->query()->delete([
+            'name' => $previous_name->value()
+        ]);
+        
+        $this->query()->insert([
+            'name' => $name->value()
+        ]);
+    }
+
 }
