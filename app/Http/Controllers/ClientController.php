@@ -9,14 +9,20 @@ use Domain\Modeling\Schema\ValueObject;
 use Domain\Modeling\Schema\Aggregate\Database;
 use BoundedContext\Laravel\Generator\Uuid;
 use BoundedContext\Contracts\Business\Invariant;
+use Infrastructure\App\Projection\ID;
 
 class ClientController extends Controller 
 {
     private $modeling_dispatcher;
+    private $id_queryable;
     
-    public function __construct(Bus\Dispatcher $modeling_dispatcher)
+    public function __construct(
+        Bus\Dispatcher $modeling_dispatcher,
+        ID\Queryable $id_queryable
+    )
     {
         $this->modeling_dispatcher = $modeling_dispatcher;
+        $this->id_queryable = $id_queryable;
     }
     
     public function command(
@@ -43,26 +49,31 @@ class ClientController extends Controller
                 return Response::create($error_msg, 400);
             }
             return Response::create($ex->getMessage(), 400);
+        } catch (ID\Exception $e) {
+            return Response::create($e->getMessage(), 400);
         }
         return $command->id()->value();
     }
     
     private function make_command_from_ast($ast)
     { 
-        $name = new ValueObject\Name($ast->value);
+        
         if ($ast->name == "CreateDatabase") {
             $id = (new Uuid())->generate();
+            $name = new ValueObject\Name($ast->value);
             return new Database\Command\Create($id, $name);  
         }
         
         if ($ast->name == "RenameDatabase") {
-            $id = $this->get_database_id($name);
-            return new Database\Command\Rename($id, $name);  
+            $old_name = new ValueObject\Name($ast->old);
+            $new_name = new ValueObject\Name($ast->new);
+            $id = $this->get_database_id($old_name);
+            return new Database\Command\Rename($id, $new_name);  
         } 
     }
     
-    private function get_database_id(Name $name)
+    private function get_database_id($name)
     {
-        
+        return $this->id_queryable->id($name);
     }
 }

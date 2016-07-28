@@ -26,7 +26,7 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
         ));
     }
     
-    protected function handle_renamed(Command\Rename $command)
+    protected function handle_rename(Command\Rename $command)
     {
         $this->check->that(Invariant\Created::class)
             ->asserts();

@@ -3,8 +3,8 @@
 return [
 
     'application' => [
-        \App\Projections\Database\Projection::class =>
-            \Infrastructure\App\Projections\Database\Projection::class,
+        \App\Projection\ID\Projection::class =>
+            \Infrastructure\App\Projection\ID\Projection::class,
     ],
 
     'domain' => [

@@ -31,5 +31,6 @@ class ReplayProjectors extends Command
         $players = $player_builder->all()->get();
         $players->reset();
         $players->play();
+        $this->line("Projectors replayed successfully");
     }
 }

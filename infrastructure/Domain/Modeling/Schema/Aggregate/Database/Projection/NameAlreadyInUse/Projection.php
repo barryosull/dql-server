@@ -6,7 +6,7 @@ use Domain\Modeling\Schema\ValueObject\Name;
 
 class Projection extends AbstractProjection implements NameAlreadyInUse\Projection
 {
-    protected $table = 'app_modeling_name_to_id';
+    protected $table = 'domain_modeling_schema_database_name_already_in_use';
 
     /** @var Queryable $queryable */
     protected $queryable;
@@ -20,9 +20,9 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
 
     public function rename(Name $previous_name, Name $name)
     {
-        $this->query()->delete([
+        $this->query()->where([
             'name' => $previous_name->value()
-        ]);
+        ])->delete();
         
         $this->query()->insert([
             'name' => $name->value()

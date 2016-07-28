@@ -1,5 +1,5 @@
 
-Command = CreateDatabase / UsingDatabase 
+Command = CreateDatabase / RenameDatabase / UsingDatabase 
 
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
@@ -10,12 +10,13 @@ CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
     ];
   }
 
-RenameDatabase = _ "rename"i _ "database"i _ value:QuotedName _ ";" _
+RenameDatabase = _ "rename"i _ "database"i _ old:QuotedName _ "to"i _ new:QuotedName _ ";" _
   {
     return [
       'type' => 'modeling',
       'name' => 'RenameDatabase',
-      'value' => $value
+      'old' => $old,
+      'new' => $new
     ];
   }
 

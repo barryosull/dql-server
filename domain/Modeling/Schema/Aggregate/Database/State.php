@@ -14,7 +14,7 @@ class State extends AbstractState implements \BoundedContext\Contracts\Sourced\A
     
     protected function when_modeling_schema_database_renamed(
         Projection $projection,
-        Event\Created $event
+        Event\Renamed $event
     )
     {
         $projection->rename($event->name);

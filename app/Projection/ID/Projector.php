@@ -13,7 +13,7 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id, $event->name);
+        $projection->set_name($event->id(), $event->name);
     }
     
     protected function when_modeling_schema_database_renamed(
@@ -22,6 +22,6 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id, $event->name);
+        $projection->set_name($event->id(), $event->name);
     }
 }

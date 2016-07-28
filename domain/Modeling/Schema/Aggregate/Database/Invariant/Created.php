@@ -8,6 +8,7 @@ class Created extends AbstractInvariant implements Invariant
 {
     protected function satisfier(Queryable $queryable)
     {
+        
         return $queryable->is_created->true();
     }
 }
