@@ -9,7 +9,7 @@ use Domain\Modeling\Schema\ValueObject;
 use Domain\Modeling\Schema\Aggregate\Database;
 use BoundedContext\Laravel\Generator\Uuid;
 use BoundedContext\Contracts\Business\Invariant;
-use Infrastructure\App\Projection\ID;
+use App\Projection\ID;
 
 class ClientController extends Controller 
 {
@@ -43,12 +43,7 @@ class ClientController extends Controller
         } catch (DQLParser\ParserError $ex) {
             return Response::create($ex->getMessage(), 400);
         } catch (Invariant\Exception $ex) {
-            if (strpos($ex->getMessage(), "NameAlreadyInUse") !== false) {
-                $name = $ast->value;
-                $error_msg = "The database '$name' already exists.";
-                return Response::create($error_msg, 400);
-            }
-            return Response::create($ex->getMessage(), 400);
+            return $this->make_error_from_ast_and_invariant_exception($ast, $ex);
         } catch (ID\Exception $e) {
             return Response::create($e->getMessage(), 400);
         }
@@ -57,7 +52,6 @@ class ClientController extends Controller
     
     private function make_command_from_ast($ast)
     { 
-        
         if ($ast->name == "CreateDatabase") {
             $id = (new Uuid())->generate();
             $name = new ValueObject\Name($ast->value);
@@ -70,6 +64,20 @@ class ClientController extends Controller
             $id = $this->get_database_id($old_name);
             return new Database\Command\Rename($id, $new_name);  
         } 
+    }
+    
+    private function make_error_from_ast_and_invariant_exception($ast, $ex) 
+    {
+        $error_msg = $ex->getMessage();
+        if (strpos($error_msg, "NameAlreadyInUse") !== false) {
+            if ($ast->name == "CreateDatabase") {
+                $error_msg = "The database '".$ast->value."' already exists.";
+            }
+            if ($ast->name == "RenameDatabase") {
+                $error_msg = "The database '".$ast->new."' already exists.";
+            } 
+        }
+        return Response::create($error_msg, 400);
     }
     
     private function get_database_id($name)

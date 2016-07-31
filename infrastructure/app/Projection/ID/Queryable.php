@@ -24,6 +24,6 @@ class Queryable extends AbstractQueryable implements ID\Queryable
         if ($row) {
             return new Uuid($row->id);
         }
-        throw new Exception("There is no database with the name '".$name->value()."'");
+        throw new ID\Exception("There is no database with the name '".$name->value()."'");
     }
 }
