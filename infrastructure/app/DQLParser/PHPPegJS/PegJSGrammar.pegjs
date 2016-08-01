@@ -29,7 +29,7 @@ RenameDatabase = _ "rename"i _ "database"i _ old:QuotedName _ "to"i _ new:Quoted
     ];
   }
 
-UsingDatabase = _ "using" _ "database" _ value:QuotedName _ ";" _
+UsingDatabase = _ "using"i _ "database"i _ value:QuotedName _ ";" _
   {
     return [
       'type' => 'modeling',

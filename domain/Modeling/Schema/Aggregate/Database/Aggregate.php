@@ -51,14 +51,4 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             $command->name
         ));
     }
-
-    protected function handle_using(Command\Using $command)
-    {
-        $this->check->that(Invariant\Created::class)
-            ->asserts();
-        
-        $this->apply(new Event\Used(
-            $command->id()
-        ));
-    }
 }

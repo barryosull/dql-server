@@ -37,17 +37,35 @@ class ClientController extends Controller
         $ast;
         try {
             $ast = $parser->parse($statement);
+            $message = $this->preprocess_ast($ast);
+            if ($message) {
+                return Response::create($message, 200);
+            }
             $command = $this->make_command_from_ast($ast);
             $this->modeling_dispatcher->dispatch($command);
-
-        } catch (DQLParser\ParserError $ex) {
-            return Response::create($ex->getMessage(), 400);
+            $message = "Command successful. Last command identifier '".$command->id()->value()."'";
+            
+            return Response::create($message, 200);
         } catch (Invariant\Exception $ex) {
             return $this->make_error_from_ast_and_invariant_exception($ast, $ex);
-        } catch (ID\Exception $e) {
+        } catch (\Exception $e) {
             return Response::create($e->getMessage(), 400);
+        }        
+    }
+    
+    private function preprocess_ast($ast)
+    {
+        if ($ast->name != "UsingDatabase") {
+            return;
         }
-        return $command->id()->value();
+        $name = new ValueObject\Name($ast->value);
+        $id = $this->get_database_id($name);
+        $current_database = session('UsingDatabase', ['id'=>'']);
+        if ($current_database['id'] == $id->value()) {
+            throw new \Exception("Already using database '".$ast->value."'");
+        }
+        session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
+        return "Using database '".$name->value()."'.";
     }
     
     private function make_command_from_ast($ast)
