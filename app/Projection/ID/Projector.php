@@ -16,6 +16,15 @@ class Projector extends AbstractProjector
         $projection->set_name($event->id(), $event->name);
     }
     
+    protected function when_modeling_schema_database_deleted(
+        Projection $projection,
+        Event\Deleted $event,
+        Snapshot $snapshot
+    )
+    {
+        $projection->delete($event->id());
+    }
+    
     protected function when_modeling_schema_database_renamed(
         Projection $projection,
         Event\Renamed $event,

@@ -24,7 +24,7 @@ class Projection extends AbstractProjection implements ProjectionContract, Query
         $this->name = $name;
         $this->is_created = new Boolean(true);
     }
-    
+        
     public function rename(Name $name)
     {
         $this->name = $name;

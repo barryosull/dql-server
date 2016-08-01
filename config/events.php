@@ -8,5 +8,8 @@ return [
         \Domain\Modeling\Schema\Aggregate\Database\Event\Used::class,
     
     '0f52c1f4-d914-4e09-b699-6f7af5e1fb89' =>
-        \Domain\Modeling\Schema\Aggregate\Database\Event\Renamed::class
+        \Domain\Modeling\Schema\Aggregate\Database\Event\Renamed::class,
+    
+    'c44bb4b7-aef1-4c50-879d-badeea8ddc1d' =>
+        \Domain\Modeling\Schema\Aggregate\Database\Event\Deleted::class
 ];

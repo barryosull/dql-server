@@ -13,7 +13,7 @@ class Projection extends AbstractProjection implements ID\Projection
 
     public function set_name(\EventSourced\ValueObject\ValueObject\Uuid $id, Name $name)
     {
-        $this->query()->where('id', '=', $id->value())->delete();
+        $this->delete($id);
         
         $this->query()->insert([
             'id' => $id->value(),
@@ -21,4 +21,8 @@ class Projection extends AbstractProjection implements ID\Projection
         ]);
     }
 
+    public function delete(\EventSourced\ValueObject\ValueObject\Uuid $id)
+    {
+        $this->query()->where('id', '=', $id->value())->delete();
+    }
 }

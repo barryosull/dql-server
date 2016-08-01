@@ -9,4 +9,7 @@ return [
     
     '4c057671-1457-4576-b99f-51afb0c1eb50' =>
         \Domain\Modeling\Schema\Aggregate\Database\Command\Rename::class,
+    
+    '25b11ced-9875-4ad9-9169-180cb9e08fd7' =>
+        \Domain\Modeling\Schema\Aggregate\Database\Command\Delete::class,
 ];

@@ -1,11 +1,20 @@
 
-Command = CreateDatabase / RenameDatabase / UsingDatabase 
+Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase 
 
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
     return [
       'type' => 'modeling',
       'name' => 'CreateDatabase',
+      'value' => $value
+    ];
+  }
+
+DeleteDatabase = _ "delete"i _ "database"i _ value:QuotedName _ ";" _
+  {
+    return [
+      'type' => 'modeling',
+      'name' => 'DeleteDatabase',
       'value' => $value
     ];
   }

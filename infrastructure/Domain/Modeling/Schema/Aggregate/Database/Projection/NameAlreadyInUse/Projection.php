@@ -20,13 +20,17 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
 
     public function rename(Name $previous_name, Name $name)
     {
-        $this->query()->where([
-            'name' => $previous_name->value()
-        ])->delete();
+        $this->delete($previous_name);
         
         $this->query()->insert([
             'name' => $name->value()
         ]);
     }
 
+    public function delete(Name $name)
+    {
+        $this->query()->where([
+            'name' => $name->value()
+        ])->delete();
+    }
 }

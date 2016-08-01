@@ -58,10 +58,16 @@ class ClientController extends Controller
             return new Database\Command\Create($id, $name);  
         }
         
+        if ($ast->name == "DeleteDatabase") {
+            $name = new ValueObject\Name($ast->value);
+            $id = $this->get_database_id($name);
+            return new Database\Command\Delete($id, $name);  
+        }
+        
         if ($ast->name == "RenameDatabase") {
             $old_name = new ValueObject\Name($ast->old);
-            $new_name = new ValueObject\Name($ast->new);
             $id = $this->get_database_id($old_name);
+            $new_name = new ValueObject\Name($ast->new);        
             return new Database\Command\Rename($id, $new_name);  
         } 
     }
