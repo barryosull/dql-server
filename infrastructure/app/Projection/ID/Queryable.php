@@ -9,15 +9,6 @@ class Queryable extends AbstractQueryable implements ID\Queryable
 {
     protected $table = 'app_modeling_name_to_id';
     
-    public function name_already_in_use(Name $name) 
-    {
-        $names = $this->query()
-            ->where('name', $name->value())
-            ->count();
-
-        return $names > 0;
-    }
-
     public function id(Name $name)
     {
         $row = $this->query()->where('name', $name->value())->first();
@@ -26,4 +17,12 @@ class Queryable extends AbstractQueryable implements ID\Queryable
         }
         throw new ID\Exception("There is no database with the name '".$name->value()."'");
     }
+
+    public function names()
+    {
+        return array_map(function($row){
+            return new Name($row->name);
+        }, $this->query()->get());
+    }
+
 }

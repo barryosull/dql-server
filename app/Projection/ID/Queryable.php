@@ -10,4 +10,9 @@ interface Queryable extends \BoundedContext\Contracts\Projection\Queryable
      * @return Uuid
      */
     public function id(Name $name);
+    
+    /**
+     * @return Name[]
+     */
+    public function names();
 }

@@ -4,25 +4,31 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\DQLParser;
 
+use BoundedContext\Contracts\Sourced\Log;
 use BoundedContext\Laravel\Bus;
 use Domain\Modeling\Schema\ValueObject;
 use Domain\Modeling\Schema\Aggregate\Database;
 use BoundedContext\Laravel\Generator\Uuid;
 use BoundedContext\Contracts\Business\Invariant;
 use App\Projection\ID;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class ClientController extends Controller 
 {
     private $modeling_dispatcher;
-    private $id_queryable;
+    private $command_log;
+    private $database_queryable;
     
     public function __construct(
         Bus\Dispatcher $modeling_dispatcher,
-        ID\Queryable $id_queryable
+        Log\Command $command_log,
+        ID\Queryable $database_queryable
     )
     {
         $this->modeling_dispatcher = $modeling_dispatcher;
-        $this->id_queryable = $id_queryable;
+        $this->command_log = $command_log;
+        $this->database_queryable = $database_queryable;
     }
     
     public function command(
@@ -43,7 +49,9 @@ class ClientController extends Controller
             }
             $command = $this->make_command_from_ast($ast);
             $this->modeling_dispatcher->dispatch($command);
-            $message = "Command successful. Last command identifier '".$command->id()->value()."'";
+            
+            $command_id = $this->command_log->last_id();
+            $message = "Command successful. Last command identifier '".$command_id->value()."'";
             
             return Response::create($message, 200);
         } catch (Invariant\Exception $ex) {
@@ -55,17 +63,34 @@ class ClientController extends Controller
     
     private function preprocess_ast($ast)
     {
-        if ($ast->name != "UsingDatabase") {
-            return;
+        if ($ast->name == "UsingDatabase") {
+            $name = new ValueObject\Name($ast->value);
+            $id = $this->get_database_id($name);
+            $current_database = session('UsingDatabase', ['id'=>'']);
+            if ($current_database['id'] == $id->value()) {
+                throw new \Exception("Already using database '".$ast->value."'");
+            }
+            session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
+            return "Using database '".$name->value()."'.";
         }
-        $name = new ValueObject\Name($ast->value);
-        $id = $this->get_database_id($name);
-        $current_database = session('UsingDatabase', ['id'=>'']);
-        if ($current_database['id'] == $id->value()) {
-            throw new \Exception("Already using database '".$ast->value."'");
+        if ($ast->name == 'ShowDatabases') {
+            $names = array_map(function(ValueObject\Name $name){
+                return ["'".$name->value()."'"];
+            }, $this->database_queryable->names());
+            return $this->output_table(['Database'], $names);
         }
-        session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
-        return "Using database '".$name->value()."'.";
+        return;
+    }
+    
+    private function output_table($headers, $rows) 
+    {
+        $output = new BufferedOutput();
+        $table = new Table($output);
+        $table->setHeaders($headers)
+            ->setRows($rows)
+        ;
+        $table->render();
+        return substr($output->fetch(), 0, -1);
     }
     
     private function make_command_from_ast($ast)
@@ -106,6 +131,6 @@ class ClientController extends Controller
     
     private function get_database_id($name)
     {
-        return $this->id_queryable->id($name);
+        return $this->database_queryable->id($name);
     }
 }

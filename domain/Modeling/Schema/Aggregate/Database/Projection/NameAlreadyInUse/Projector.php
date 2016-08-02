@@ -32,6 +32,6 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->rename($event->previous_name, $event->name);
+        $projection->rename($event->old_name, $event->new_name);
     }
 }

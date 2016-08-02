@@ -17,6 +17,6 @@ class State extends AbstractState implements \BoundedContext\Contracts\Sourced\A
         Event\Renamed $event
     )
     {
-        $projection->rename($event->name);
+        $projection->rename($event->new_name);
     }
 }

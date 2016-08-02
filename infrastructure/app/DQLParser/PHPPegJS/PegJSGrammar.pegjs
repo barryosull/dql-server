@@ -1,5 +1,5 @@
 
-Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase 
+Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases
 
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
@@ -35,6 +35,14 @@ UsingDatabase = _ "using"i _ "database"i _ value:QuotedName _ ";" _
       'type' => 'modeling',
       'name' => 'UsingDatabase',
       'value' => $value
+    ];
+  }
+
+ShowDatabases = _ "show"i _ "databases"i _ ";" _
+  {
+    return [
+      'type' => 'modeling',
+      'name' => 'ShowDatabases'
     ];
   }
 
