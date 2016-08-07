@@ -13,6 +13,7 @@ class CreateDomainUnqiueName extends Migration
     public function up()
     {
         Schema::create('domain_modeling_schema_domain_name_already_in_use', function (Blueprint $table) {
+            $table->string('domain_id');
             $table->string('name');
             $table->string('database_id');
         });

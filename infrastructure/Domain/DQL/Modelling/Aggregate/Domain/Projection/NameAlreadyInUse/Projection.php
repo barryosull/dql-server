@@ -12,27 +12,28 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
     /** @var Queryable $queryable */
     protected $queryable;
     
-    public function create(Name $name, Uuid $datasbase_id) 
+    public function create(Uuid $domain_id, Name $name, Uuid $database_id) 
     {
         $this->query()->insert([
+            'domain_id' => $domain_id->value(),
             'name' => $name->value(),
-            'database_id' => $datasbase_id->value(),
+            'database_id' => $database_id->value(),
         ]);
     }
 
-    public function rename(Name $previous_name, Name $name)
-    {
-        $this->delete($previous_name);
-        
-        $this->query()->insert([
-            'name' => $name->value()
-        ]);
-    }
-
-    public function delete(Name $name)
+    public function rename(Uuid $domain_id, Name $new_name)
     {
         $this->query()->where([
-            'name' => $name->value()
+            'domain_id' => $domain_id->value()
+        ])->update([
+            'name' => $new_name->value()
+        ]);
+    }
+
+    public function delete(Uuid $domain_id)
+    {
+        $this->query()->where([
+            'domain_id' => $domain_id->value()
         ])->delete();
     }
 }

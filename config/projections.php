@@ -5,6 +5,9 @@ return [
     'application' => [
         \App\Projection\ID\Projection::class =>
             \Infrastructure\App\Projection\ID\Projection::class,
+        
+        \App\Projection\Domain\Projection::class =>
+            \Infrastructure\App\Projection\Domain\Projection::class,
     ],
 
     'domain' => [

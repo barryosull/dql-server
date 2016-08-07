@@ -12,7 +12,7 @@ use Domain\DQL\Modelling\Aggregate\Domain;
 use BoundedContext\Laravel\Generator\Uuid as UuidGenerator;
 use EventSourced\ValueObject\ValueObject\Uuid;
 use BoundedContext\Contracts\Business\Invariant;
-use App\Projection\ID;
+use App\Projection;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -21,16 +21,20 @@ class ClientController extends Controller
     private $modeling_dispatcher;
     private $command_log;
     private $database_queryable;
+    private $domain_queryable;
     
     public function __construct(
         Bus\Dispatcher $modeling_dispatcher,
         Log\Command $command_log,
-        ID\Queryable $database_queryable
+        Projection\ID\Queryable $database_queryable,
+        Projection\Domain\Queryable $domain_queryable
+            
     )
     {
         $this->modeling_dispatcher = $modeling_dispatcher;
         $this->command_log = $command_log;
         $this->database_queryable = $database_queryable;
+        $this->domain_queryable = $domain_queryable;
     }
     
     public function command(
@@ -83,6 +87,13 @@ class ClientController extends Controller
                 return ["'".$name->value()."'"];
             }, $this->database_queryable->names());
             return $this->output_table(['Database'], $names);
+        }
+        if ($ast->name == 'ShowDomains') {
+            $database_id = $this->get_using_database_id($ast);
+            $names = array_map(function(ValueObject\Name $name){
+                return ["'".$name->value()."'"];
+            }, $this->domain_queryable->names($database_id));
+            return $this->output_table(['Domain'], $names);
         }
         return;
     }
@@ -140,6 +151,19 @@ class ClientController extends Controller
             $name = new ValueObject\Name($ast->value);
             return new Domain\Command\Create($id, $database_id, $name);
         } 
+        
+        if ($ast->name == "RenameDomain") {
+            $old_name = new ValueObject\Name($ast->old);
+            $id = $this->get_domain_id($database_id, $old_name);
+            $name = new ValueObject\Name($ast->new);
+            return new Domain\Command\Rename($id, $name);
+        } 
+        
+        if ($ast->name == "DeleteDomain") {
+            $name = new ValueObject\Name($ast->value);
+            $id = $this->get_domain_id($database_id, $name);
+            return new Domain\Command\Delete($id);
+        } 
     }
     
     private function get_using_database_id($ast)
@@ -177,5 +201,10 @@ class ClientController extends Controller
     private function get_database_id($name)
     {
         return $this->database_queryable->id($name);
+    }
+    
+    private function get_domain_id(Uuid $database_id, $name)
+    {
+        return $this->domain_queryable->id($database_id, $name);
     }
 }

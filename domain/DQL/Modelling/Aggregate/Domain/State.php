@@ -9,7 +9,7 @@ class State extends AbstractState implements \BoundedContext\Contracts\Sourced\A
         Event\Created $event
     )
     {
-        $projection->create($event->name);
+        $projection->create($event->name, $event->database_id);
     }
     
     protected function when_dql_modelling_domain_renamed(

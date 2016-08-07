@@ -5,9 +5,9 @@ use EventSourced\ValueObject\ValueObject\Uuid;
 
 interface Projection extends \BoundedContext\Contracts\Projection\Projection
 {
-    public function create(Name $name, Uuid $database_id);
+    public function create(Uuid $id, Name $name, Uuid $database_id);
     
-    public function delete(Name $name);
+    public function delete(Uuid $id);
     
-    public function rename(Name $previous_name, Name $name);
+    public function rename(Uuid $id, Name $new_name);
 }

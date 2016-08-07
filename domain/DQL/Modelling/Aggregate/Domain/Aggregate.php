@@ -42,7 +42,7 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->asserts();
 
         $this->check->that(Invariant\NameAlreadyInUse::class)
-            ->assuming([$command->name])
+            ->assuming([$command->name, $this->state()->queryable()->database_id])
             ->not()
             ->asserts();
         

@@ -9,7 +9,7 @@ class Queryable extends AbstractQueryable implements NameAlreadyInUse\Queryable
 {
     protected $table = 'domain_modeling_schema_domain_name_already_in_use';
     
-    public function name_already_in_use(Name $name, Uuid $database_id) 
+    public function name_already_in_use(Name $name, Uuid $database_id)
     {
         $names = $this->query()
             ->where('name', $name->value())

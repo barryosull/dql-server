@@ -1,5 +1,5 @@
 
-Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases / CreateDomain
+Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases / CreateDomain / DeleteDomain / RenameDomain / ShowDomains
 
 /* Databases */
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
@@ -49,7 +49,7 @@ ShowDatabases = _ "show"i _ "databases"i _ ";" _
 
 /* Domains */
 
-CreateDomain = _ "create"i _ "domain"i _ value:QuotedName _ using:Using? ";" _
+CreateDomain = _ "create"i _ "domain"i _ value:QuotedName using:Using? ";" _
   {
     return [
       'using' => $using,
@@ -59,7 +59,37 @@ CreateDomain = _ "create"i _ "domain"i _ value:QuotedName _ using:Using? ";" _
     ];
   }
 
-Using = "using"i _ "database"i _ name:QuotedName _
+DeleteDomain = _ "delete"i _ "domain"i _ value:QuotedName using:Using? ";" _
+  {
+    return [
+      'using' => $using,
+      'type' => 'modeling',
+      'name' => 'DeleteDomain',
+      'value' => $value
+    ];
+  }
+
+RenameDomain = _ "rename"i _ "domain"i _ old:QuotedName _ "to"i _ new:QuotedName using:Using? ";" _
+  {
+    return [
+      'using' => $using,
+      'type' => 'modeling',
+      'name' => 'RenameDomain',
+      'old' => $old,
+      'new' => $new
+    ];
+  }
+
+ShowDomains = _ "show"i _ "domains"i using:Using? ";" _
+  {
+    return [
+      'using' => $using,
+      'type' => 'modeling',
+      'name' => 'ShowDomains'
+    ];
+  }
+
+Using = _ "using"i _ "database"i _ name:QuotedName _
   {
     return $name; 
   }
