@@ -1,10 +1,10 @@
-<?php namespace Infrastructure\App\Projection\ID;
+<?php namespace Infrastructure\App\Projection\Database;
 
 use BoundedContext\Laravel\Illuminate\Projection\AbstractProjection;
-use App\Projection\ID;
+use App\Projection\Database;
 use Domain\DQL\Modelling\ValueObject\Name;
 
-class Projection extends AbstractProjection implements ID\Projection
+class Projection extends AbstractProjection implements Database\Projection
 {
     protected $table = 'app_modeling_name_to_id';
 

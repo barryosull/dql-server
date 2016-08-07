@@ -1,11 +1,11 @@
-<?php namespace Infrastructure\App\Projection\ID;
+<?php namespace Infrastructure\App\Projection\Database;
 
-use App\Projection\ID;
+use App\Projection\Database;
 use Domain\DQL\Modelling\ValueObject\Name;
 use EventSourced\ValueObject\ValueObject\Uuid;
 use BoundedContext\Laravel\Illuminate\Projection\AbstractQueryable;
 
-class Queryable extends AbstractQueryable implements ID\Queryable
+class Queryable extends AbstractQueryable implements Database\Queryable
 {
     protected $table = 'app_modeling_name_to_id';
     
@@ -15,7 +15,7 @@ class Queryable extends AbstractQueryable implements ID\Queryable
         if ($row) {
             return new Uuid($row->id);
         }
-        throw new ID\Exception("There is no database with the name '".$name->value()."'");
+        throw new Database\Exception("There is no database with the name '".$name->value()."'");
     }
 
     public function names()

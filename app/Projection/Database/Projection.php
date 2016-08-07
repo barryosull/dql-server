@@ -1,4 +1,4 @@
-<?php namespace App\Projection\ID;
+<?php namespace App\Projection\Database;
 
 use EventSourced\ValueObject\ValueObject\Uuid;
 use Domain\DQL\Modelling\ValueObject\Name;

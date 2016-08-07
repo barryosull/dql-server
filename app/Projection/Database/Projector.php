@@ -1,4 +1,4 @@
-<?php namespace App\Projection\ID;
+<?php namespace App\Projection\Database;
 
 use BoundedContext\Projection\AbstractProjector;
 use BoundedContext\Contracts\Event\Snapshot\Snapshot;

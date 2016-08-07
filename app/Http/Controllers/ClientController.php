@@ -26,7 +26,7 @@ class ClientController extends Controller
     public function __construct(
         Bus\Dispatcher $modeling_dispatcher,
         Log\Command $command_log,
-        Projection\ID\Queryable $database_queryable,
+        Projection\Database\Queryable $database_queryable,
         Projection\Domain\Queryable $domain_queryable
             
     )
