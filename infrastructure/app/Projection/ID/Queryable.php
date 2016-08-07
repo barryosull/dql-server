@@ -1,7 +1,7 @@
 <?php namespace Infrastructure\App\Projection\ID;
 
 use App\Projection\ID;
-use Domain\Modeling\Schema\ValueObject\Name;
+use Domain\DQL\Modelling\ValueObject\Name;
 use EventSourced\ValueObject\ValueObject\Uuid;
 use BoundedContext\Laravel\Illuminate\Projection\AbstractQueryable;
 

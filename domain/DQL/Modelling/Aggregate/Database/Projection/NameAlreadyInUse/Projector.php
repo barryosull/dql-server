@@ -1,10 +1,11 @@
-<?php namespace App\Projection\ID;
+<?php namespace Domain\DQL\Modelling\Aggregate\Database\Projection\NameAlreadyInUse;
 
 use BoundedContext\Projection\AbstractProjector;
 use BoundedContext\Contracts\Event\Snapshot\Snapshot;
+
 use Domain\DQL\Modelling\Aggregate\Database\Event;
 
-/** @id 16fa1308-d1c8-4b92-b2a9-b39046be1af6 */
+/** @id 121837f2-6b4a-4450-855a-94bc23d2db49 */
 class Projector extends AbstractProjector
 {
     protected function when_dql_modelling_database_created(
@@ -13,7 +14,7 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id(), $event->name);
+        $projection->create($event->name);
     }
     
     protected function when_dql_modelling_database_deleted(
@@ -22,7 +23,7 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->delete($event->id());
+        $projection->delete($event->name);
     }
     
     protected function when_dql_modelling_database_renamed(
@@ -31,6 +32,6 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id(), $event->new_name);
+        $projection->rename($event->old_name, $event->new_name);
     }
 }

@@ -1,7 +1,7 @@
 <?php namespace App\Projection\ID;
 
 use EventSourced\ValueObject\ValueObject\Uuid;
-use Domain\Modeling\Schema\ValueObject\Name;
+use Domain\DQL\Modelling\ValueObject\Name;
 
 interface Projection extends \BoundedContext\Contracts\Projection\Projection
 {

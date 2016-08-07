@@ -8,7 +8,10 @@ return [
     ],
 
     'domain' => [
-        \Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class =>
-            \Infrastructure\Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class
+        \Domain\DQL\Modelling\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class =>
+            \Infrastructure\Domain\DQL\Modelling\Aggregate\Database\Projection\NameAlreadyInUse\Projection::class,
+        
+        \Domain\DQL\Modelling\Aggregate\Domain\Projection\NameAlreadyInUse\Projection::class =>
+            \Infrastructure\Domain\DQL\Modelling\Aggregate\Domain\Projection\NameAlreadyInUse\Projection::class
     ],
 ];

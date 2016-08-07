@@ -2,7 +2,7 @@
 
 use BoundedContext\Laravel\Illuminate\Projection\AbstractProjection;
 use App\Projection\ID;
-use Domain\Modeling\Schema\ValueObject\Name;
+use Domain\DQL\Modelling\ValueObject\Name;
 
 class Projection extends AbstractProjection implements ID\Projection
 {

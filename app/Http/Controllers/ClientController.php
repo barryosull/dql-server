@@ -6,9 +6,11 @@ use App\DQLParser;
 
 use BoundedContext\Contracts\Sourced\Log;
 use BoundedContext\Laravel\Bus;
-use Domain\Modeling\Schema\ValueObject;
-use Domain\Modeling\Schema\Aggregate\Database;
-use BoundedContext\Laravel\Generator\Uuid;
+use Domain\DQL\Modelling\ValueObject;
+use Domain\DQL\Modelling\Aggregate\Database;
+use Domain\DQL\Modelling\Aggregate\Domain;
+use BoundedContext\Laravel\Generator\Uuid as UuidGenerator;
+use EventSourced\ValueObject\ValueObject\Uuid;
 use BoundedContext\Contracts\Business\Invariant;
 use App\Projection\ID;
 use Symfony\Component\Console\Helper\Table;
@@ -58,7 +60,7 @@ class ClientController extends Controller
             return $this->make_error_from_ast_and_invariant_exception($ast, $ex);
         } catch (\Exception $e) {
             return Response::create($e->getMessage(), 400);
-        }        
+        }
     }
     
     private function preprocess_ast($ast)
@@ -66,11 +68,14 @@ class ClientController extends Controller
         if ($ast->name == "UsingDatabase") {
             $name = new ValueObject\Name($ast->value);
             $id = $this->get_database_id($name);
-            $current_database = session('UsingDatabase', ['id'=>'']);
-            if ($current_database['id'] == $id->value()) {
+            
+            $current_database = $this->fetch_selected_database_id();
+
+            if ($current_database && $current_database->equals($id)) {
                 throw new \Exception("Already using database '".$ast->value."'");
             }
-            session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
+            $this->store_selected_database($id, $name);
+            
             return "Using database '".$name->value()."'.";
         }
         if ($ast->name == 'ShowDatabases') {
@@ -80,6 +85,20 @@ class ClientController extends Controller
             return $this->output_table(['Database'], $names);
         }
         return;
+    }
+    
+    private function fetch_selected_database_id()
+    {
+        $current_database = session('UsingDatabase', ['id'=>'']);
+        if ($current_database['id']) {
+            return new Uuid($current_database['id']);
+        }
+        return null;
+    }
+    
+    private function store_selected_database($id, $name)
+    {
+        session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
     }
     
     private function output_table($headers, $rows) 
@@ -96,7 +115,7 @@ class ClientController extends Controller
     private function make_command_from_ast($ast)
     { 
         if ($ast->name == "CreateDatabase") {
-            $id = (new Uuid())->generate();
+            $id = (new UuidGenerator())->generate();
             $name = new ValueObject\Name($ast->value);
             return new Database\Command\Create($id, $name);  
         }
@@ -113,6 +132,28 @@ class ClientController extends Controller
             $new_name = new ValueObject\Name($ast->new);        
             return new Database\Command\Rename($id, $new_name);  
         } 
+        
+        $database_id = $this->get_using_database_id($ast);
+        
+        if ($ast->name == "CreateDomain") {
+            $id = (new UuidGenerator())->generate();
+            $name = new ValueObject\Name($ast->value);
+            return new Domain\Command\Create($id, $database_id, $name);
+        } 
+    }
+    
+    private function get_using_database_id($ast)
+    {
+        if ($ast->using) {
+            $name = new ValueObject\Name($ast->using);
+            $id = $this->get_database_id($name);
+            return $id;
+        }
+        $selected_database_id = $this->fetch_selected_database_id();
+        if ($selected_database_id) {
+            return $selected_database_id;
+        }        
+        throw new \Exception("No database selected");
     }
     
     private function make_error_from_ast_and_invariant_exception($ast, $ex) 
@@ -125,6 +166,10 @@ class ClientController extends Controller
             if ($ast->name == "RenameDatabase") {
                 $error_msg = "The database '".$ast->new."' already exists.";
             } 
+            if ($ast->name == "CreateDomain") {
+                $error_msg = "The domain '".$ast->value."' already exists.";
+            }
+            
         }
         return Response::create($error_msg, 400);
     }

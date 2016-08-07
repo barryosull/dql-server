@@ -1,6 +1,7 @@
 
-Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases
+Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases / CreateDomain
 
+/* Databases */
 CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
   {
     return [
@@ -44,6 +45,23 @@ ShowDatabases = _ "show"i _ "databases"i _ ";" _
       'type' => 'modeling',
       'name' => 'ShowDatabases'
     ];
+  }
+
+/* Domains */
+
+CreateDomain = _ "create"i _ "domain"i _ value:QuotedName _ using:Using? ";" _
+  {
+    return [
+      'using' => $using,
+      'type' => 'modeling',
+      'name' => 'CreateDomain',
+      'value' => $value
+    ];
+  }
+
+Using = "using"i _ "database"i _ name:QuotedName _
+  {
+    return $name; 
   }
 
 QuotedName = SingleQuotedName / DoubleQuotedName

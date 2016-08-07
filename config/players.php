@@ -15,7 +15,9 @@ return [
     'domain' => [
         'projectors' => [
             '121837f2-6b4a-4450-855a-94bc23d2db49' => 
-                Domain\Modeling\Schema\Aggregate\Database\Projection\NameAlreadyInUse\Projector::class
+                Domain\DQL\Modelling\Aggregate\Database\Projection\NameAlreadyInUse\Projector::class,
+            'bc34e480-779d-4156-92c7-631003a898e6' => 
+                Domain\DQL\Modelling\Aggregate\Domain\Projection\NameAlreadyInUse\Projector::class
         ],
         'workflows' => [
 
