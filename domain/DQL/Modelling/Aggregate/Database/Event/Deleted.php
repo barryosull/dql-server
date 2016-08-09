@@ -1,18 +1,19 @@
 <?php namespace Domain\DQL\Modelling\Aggregate\Database\Event;
 
-use BoundedContext\Contracts\Event\Event;
-use BoundedContext\Event\AbstractEvent;
-use EventSourced\ValueObject\ValueObject\Uuid;
+use EventSourced\ValueObject\ValueObject\Type\AbstractComposite;
 use Domain\DQL\Modelling\ValueObject\Name;
 
-/** @id c44bb4b7-aef1-4c50-879d-badeea8ddc1d */
-class Deleted extends AbstractEvent implements Event
+class Deleted extends AbstractComposite implements \BoundedContext\Contracts\Event\DomainEvent 
 {
     public $name;
 
-    public function __construct(Uuid $id, Name $name)
+    public function __construct(Name $name)
     {
-        parent::__construct($id);
         $this->name = $name;
+    }
+    
+    public function name()
+    {
+        return $this->name;
     }
 }

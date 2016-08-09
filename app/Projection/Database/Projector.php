@@ -13,7 +13,7 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id(), $event->name);
+        $projection->set_name($snapshot->root_entity_id(), $event->name);
     }
     
     protected function when_dql_modelling_database_deleted(
@@ -22,7 +22,7 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->delete($event->id());
+        $projection->delete($snapshot->root_entity_id());
     }
     
     protected function when_dql_modelling_database_renamed(
@@ -31,6 +31,6 @@ class Projector extends AbstractProjector
         Snapshot $snapshot
     )
     {
-        $projection->set_name($event->id(), $event->new_name);
+        $projection->set_name($snapshot->root_entity_id(), $event->new_name);
     }
 }

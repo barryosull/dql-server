@@ -1,20 +1,26 @@
 <?php namespace Domain\DQL\Modelling\Aggregate\Database\Event;
 
-use BoundedContext\Contracts\Event\Event;
-use BoundedContext\Event\AbstractEvent;
-use EventSourced\ValueObject\ValueObject\Uuid;
+use EventSourced\ValueObject\ValueObject\Type\AbstractComposite;
 use Domain\DQL\Modelling\ValueObject\Name;
 
-/** @id 0f52c1f4-d914-4e09-b699-6f7af5e1fb89 */
-class Renamed extends AbstractEvent implements Event
+class Renamed extends AbstractComposite implements \BoundedContext\Contracts\Event\DomainEvent
 {
     public $old_name;
     public $new_name;
 
-    public function __construct(Uuid $id, name $old_name, Name $new_name)
+    public function __construct(Name $old_name, Name $new_name)
     {
-        parent::__construct($id);
         $this->old_name = $old_name;
         $this->new_name = $new_name;
+    }
+    
+    public function old_name()
+    {
+        return $this->old_name;
+    }
+    
+    public function new_name()
+    {
+        return $this->new_name;
     }
 }

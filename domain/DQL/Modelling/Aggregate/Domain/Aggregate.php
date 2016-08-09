@@ -18,11 +18,10 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->not()
             ->asserts();
  
-        $this->apply(new Event\Created(
-            $command->id(),
+        $this->apply(Event\Created::class,
             $command->database_id,
             $command->name
-        ));
+        );
     }
     
     protected function handle_delete(Command\Delete $command)
@@ -30,10 +29,9 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
         $this->check->that(Invariant\Created::class)
             ->asserts();
 
-        $this->apply(new Event\Deleted(
-            $command->id(),
+        $this->apply(Event\Deleted::class,
             $this->state()->queryable()->name
-        ));
+        );
     }
     
     protected function handle_rename(Command\Rename $command)
@@ -46,10 +44,9 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->not()
             ->asserts();
         
-        $this->apply(new Event\Renamed(
-            $command->id(),
+        $this->apply(Event\Renamed::class,
             $this->state()->queryable()->name,
             $command->name
-        ));
+        );
     }
 }

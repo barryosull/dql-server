@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\DQLParser;
 
-use BoundedContext\Contracts\Sourced\Log;
 use BoundedContext\Laravel\Bus;
 use Domain\DQL\Modelling\ValueObject;
 use Domain\DQL\Modelling\Aggregate\Database;
@@ -19,20 +18,17 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class ClientController extends Controller 
 {
     private $modeling_dispatcher;
-    private $command_log;
     private $database_queryable;
     private $domain_queryable;
     
     public function __construct(
         Bus\Dispatcher $modeling_dispatcher,
-        Log\Command $command_log,
         Projection\Database\Queryable $database_queryable,
         Projection\Domain\Queryable $domain_queryable
             
     )
     {
         $this->modeling_dispatcher = $modeling_dispatcher;
-        $this->command_log = $command_log;
         $this->database_queryable = $database_queryable;
         $this->domain_queryable = $domain_queryable;
     }
@@ -56,15 +52,14 @@ class ClientController extends Controller
             $command = $this->make_command_from_ast($ast);
             $this->modeling_dispatcher->dispatch($command);
             
-            $command_id = $this->command_log->last_id();
-            $message = "Command successful. Last command identifier '".$command_id->value()."'";
+            $message = "Command successful. Last command identifier '".$command->id()->value()."'";
             
             return Response::create($message, 200);
         } catch (Invariant\Exception $ex) {
             return $this->make_error_from_ast_and_invariant_exception($ast, $ex);
-        } catch (\Exception $e) {
+        } /*catch (\Exception $e) {
             return Response::create($e->getMessage(), 400);
-        }
+        }*/
     }
     
     private function preprocess_ast($ast)
@@ -125,23 +120,24 @@ class ClientController extends Controller
     
     private function make_command_from_ast($ast)
     { 
+        $id = (new UuidGenerator())->generate();
         if ($ast->name == "CreateDatabase") {
-            $id = (new UuidGenerator())->generate();
+            $entity_id = (new UuidGenerator())->generate();
             $name = new ValueObject\Name($ast->value);
-            return new Database\Command\Create($id, $name);  
+            return new Database\Command\Create($id, $entity_id, $name);  
         }
         
         if ($ast->name == "DeleteDatabase") {
             $name = new ValueObject\Name($ast->value);
-            $id = $this->get_database_id($name);
-            return new Database\Command\Delete($id, $name);  
+            $entity_id = $this->get_database_id($name);
+            return new Database\Command\Delete($id, $entity_id, $name);  
         }
         
         if ($ast->name == "RenameDatabase") {
             $old_name = new ValueObject\Name($ast->old);
-            $id = $this->get_database_id($old_name);
+            $entity_id = $this->get_database_id($old_name);
             $new_name = new ValueObject\Name($ast->new);        
-            return new Database\Command\Rename($id, $new_name);  
+            return new Database\Command\Rename($id, $entity_id, $new_name);  
         } 
         
         $database_id = $this->get_using_database_id($ast);
@@ -149,20 +145,20 @@ class ClientController extends Controller
         if ($ast->name == "CreateDomain") {
             $id = (new UuidGenerator())->generate();
             $name = new ValueObject\Name($ast->value);
-            return new Domain\Command\Create($id, $database_id, $name);
+            return new Domain\Command\Create($id, $entity_id, $database_id, $name);
         } 
         
         if ($ast->name == "RenameDomain") {
             $old_name = new ValueObject\Name($ast->old);
-            $id = $this->get_domain_id($database_id, $old_name);
+            $entity_id = $this->get_domain_id($database_id, $old_name);
             $name = new ValueObject\Name($ast->new);
-            return new Domain\Command\Rename($id, $name);
+            return new Domain\Command\Rename($id, $entity_id, $name);
         } 
         
         if ($ast->name == "DeleteDomain") {
             $name = new ValueObject\Name($ast->value);
-            $id = $this->get_domain_id($database_id, $name);
-            return new Domain\Command\Delete($id);
+            $entity_id = $this->get_domain_id($database_id, $name);
+            return new Domain\Command\Delete($id, $entity_id);
         } 
     }
     
