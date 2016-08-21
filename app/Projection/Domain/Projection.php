@@ -1,13 +1,10 @@
 <?php namespace App\Projection\Domain;
 
-use EventSourced\ValueObject\ValueObject\Uuid;
-use Domain\DQL\Modelling\ValueObject\Name;
-
 interface Projection extends \BoundedContext\Contracts\Projection\Projection
 {
-    public function set_name(Uuid $id, Name $name, Uuid $database_id);
+    public function set_name($id, $name, $database_id);
     
-    public function update_name(Uuid $domain_id, Name $name);
+    public function update_name($domain_id, $name);
     
-    public function delete(Uuid $id);
+    public function delete($id);
 }

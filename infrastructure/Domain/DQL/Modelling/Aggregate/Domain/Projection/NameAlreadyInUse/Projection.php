@@ -2,8 +2,6 @@
 
 use BoundedContext\Laravel\Illuminate\Projection\AbstractProjection;
 use Domain\DQL\Modelling\Aggregate\Domain\Projection\NameAlreadyInUse;
-use Domain\DQL\Modelling\ValueObject\Name;
-use EventSourced\ValueObject\ValueObject\Uuid;
 
 class Projection extends AbstractProjection implements NameAlreadyInUse\Projection
 {
@@ -12,28 +10,28 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
     /** @var Queryable $queryable */
     protected $queryable;
     
-    public function create(Uuid $domain_id, Name $name, Uuid $database_id) 
+    public function create($domain_id, $name, $database_id) 
     {
         $this->query()->insert([
-            'domain_id' => $domain_id->value(),
-            'name' => $name->value(),
-            'database_id' => $database_id->value(),
+            'domain_id' => $domain_id,
+            'name' => $name,
+            'database_id' => $database_id,
         ]);
     }
 
-    public function rename(Uuid $domain_id, Name $new_name)
+    public function rename($domain_id, $new_name)
     {
         $this->query()->where([
-            'domain_id' => $domain_id->value()
+            'domain_id' => $domain_id
         ])->update([
-            'name' => $new_name->value()
+            'name' => $new_name
         ]);
     }
 
-    public function delete(Uuid $domain_id)
+    public function delete($domain_id)
     {
         $this->query()->where([
-            'domain_id' => $domain_id->value()
+            'domain_id' => $domain_id
         ])->delete();
     }
 }

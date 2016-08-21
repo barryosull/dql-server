@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\DQLParser;
-
 use BoundedContext\Laravel\Bus;
 use Domain\DQL\Modelling\ValueObject;
 use Domain\DQL\Modelling\Aggregate\Database;
@@ -24,8 +23,7 @@ class ClientController extends Controller
     public function __construct(
         Bus\Dispatcher $modeling_dispatcher,
         Projection\Database\Queryable $database_queryable,
-        Projection\Domain\Queryable $domain_queryable
-            
+        Projection\Domain\Queryable $domain_queryable 
     )
     {
         $this->modeling_dispatcher = $modeling_dispatcher;
@@ -33,54 +31,44 @@ class ClientController extends Controller
         $this->domain_queryable = $domain_queryable;
     }
     
-    public function command(
+    public function statement(
         Request $request, 
         DQLParser\DQLParser $parser
     ){
-        $this->validate($request, [
-            'statement' => 'required',
-        ]);
-        $statement = $request->get('statement');
+        $this->validate($request, ['statement' => 'required']);
 
-        $ast;
         try {
-            $ast = $parser->parse($statement);
-            $message = $this->preprocess_ast($ast);
-            if ($message) {
-                return Response::create($message, 200);
-            }
-            $command = $this->make_command_from_ast($ast);
-            $this->modeling_dispatcher->dispatch($command);
-            
-            $message = "Command successful. Last command identifier '".$command->id()->value()."'";
-            
-            return Response::create($message, 200);
-        } catch (Invariant\Exception $ex) {
-            return $this->make_error_from_ast_and_invariant_exception($ast, $ex);
-        } /*catch (\Exception $e) {
+            $ast = $parser->parse( $request->get('statement') );
+        } catch (DQLParser\ParserError $e) {
             return Response::create($e->getMessage(), 400);
-        }*/
+        }
+
+        $result = "";
+        if ($ast->type == "query") {
+            $result = $this->handle_query($ast);
+        }
+        if ($ast->type == "controllerCommand") {
+            $result = $this->handle_controller_command($ast);                
+        }
+        if ($ast->type == "command") {
+            try {
+                $result = $this->handle_command($ast);
+            } catch (Invariant\Exception $ex) {
+                return $this->domain_error_translation($ast, $ex);
+            }
+        }
+        return Response::create($result, 200);
     }
     
-    private function preprocess_ast($ast)
+    private function handle_query($ast)
     {
-        if ($ast->name == "UsingDatabase") {
-            $name = new ValueObject\Name($ast->value);
-            $id = $this->get_database_id($name);
-            
-            $current_database = $this->fetch_selected_database_id();
-
-            if ($current_database && $current_database->equals($id)) {
-                throw new \Exception("Already using database '".$ast->value."'");
-            }
-            $this->store_selected_database($id, $name);
-            
-            return "Using database '".$name->value()."'.";
-        }
         if ($ast->name == 'ShowDatabases') {
             $names = array_map(function(ValueObject\Name $name){
                 return ["'".$name->value()."'"];
             }, $this->database_queryable->names());
+            if (count($names) == 0) {
+                return "There are no databases.";
+            }
             return $this->output_table(['Database'], $names);
         }
         if ($ast->name == 'ShowDomains') {
@@ -88,23 +76,64 @@ class ClientController extends Controller
             $names = array_map(function(ValueObject\Name $name){
                 return ["'".$name->value()."'"];
             }, $this->domain_queryable->names($database_id));
+            if (count($names) == 0) {
+                return "There are no domains.";
+            }
             return $this->output_table(['Domain'], $names);
         }
-        return;
     }
     
-    private function fetch_selected_database_id()
+    private function handle_controller_command($ast)
     {
-        $current_database = session('UsingDatabase', ['id'=>'']);
-        if ($current_database['id']) {
-            return new Uuid($current_database['id']);
+        $name = new ValueObject\Name($ast->value);
+        
+        if ($ast->name == "UsingDatabase") {
+
+            $id = $this->database_queryable->id($name);
+            $current_database_id = $this->fetch_id('database');
+
+            if ($current_database_id && $current_database_id->equals($id)) {
+                throw new \Exception("Already using database '".$ast->value."'");
+            }
+            $this->store_id('database', $id);
+            
+            return "Using database '".$name->value()."'.";
+        }
+        
+        if ($ast->name == "ForDomain") {
+            $database_id = $this->get_using_database_id($ast);
+            $id = $this->domain_queryable->id($database_id, $name);
+            
+            $current_domain_id = $this->fetch_id('domain');
+
+            if ($current_domain_id && $current_domain_id->equals($id)) {
+                throw new \Exception("Already using domain '".$ast->value."'");
+            }
+            $this->store_id('domain', $id);
+            
+            return "Using domain '".$name->value()."'.";
+        }
+    }
+    
+    private function handle_command($ast)
+    {
+        $command = $this->make_command_from_ast($ast);
+        $this->modeling_dispatcher->dispatch($command);
+        return "Command successful. Last command identifier '".$command->id()->value()."'";        
+    }
+    
+    private function store_id($key, $id)
+    {
+        session([$key => $id]);
+    }
+    
+    private function fetch_id($key)
+    {
+        $id = session($key, '');
+        if ($id) {
+            return new Uuid($id);
         }
         return null;
-    }
-    
-    private function store_selected_database($id, $name)
-    {
-        session(['UsingDatabase' => ['name'=>$name->value(), 'id'=>$id->value()]]);
     }
     
     private function output_table($headers, $rows) 
@@ -123,84 +152,93 @@ class ClientController extends Controller
         $id = (new UuidGenerator())->generate();
         if ($ast->name == "CreateDatabase") {
             $entity_id = (new UuidGenerator())->generate();
-            $name = new ValueObject\Name($ast->value);
+            $name = $this->make_name($ast->value, 'database');
             return new Database\Command\Create($id, $entity_id, $name);  
         }
         
         if ($ast->name == "DeleteDatabase") {
-            $name = new ValueObject\Name($ast->value);
-            $entity_id = $this->get_database_id($name);
+            $name = $this->make_name($ast->value, 'database');
+            $entity_id = $this->database_queryable->id($name);
             return new Database\Command\Delete($id, $entity_id, $name);  
         }
         
         if ($ast->name == "RenameDatabase") {
-            $old_name = new ValueObject\Name($ast->old);
-            $entity_id = $this->get_database_id($old_name);
-            $new_name = new ValueObject\Name($ast->new);        
+            $old_name = $this->make_name($ast->old, 'database');
+            $entity_id = $this->database_queryable->id($old_name);
+            $new_name = $this->make_name($ast->new, 'database');   
             return new Database\Command\Rename($id, $entity_id, $new_name);  
         } 
         
         $database_id = $this->get_using_database_id($ast);
         
         if ($ast->name == "CreateDomain") {
-            $id = (new UuidGenerator())->generate();
-            $name = new ValueObject\Name($ast->value);
+            $entity_id = (new UuidGenerator())->generate();
+            $name = $this->make_name($ast->value, 'domain');
             return new Domain\Command\Create($id, $entity_id, $database_id, $name);
         } 
         
         if ($ast->name == "RenameDomain") {
-            $old_name = new ValueObject\Name($ast->old);
-            $entity_id = $this->get_domain_id($database_id, $old_name);
-            $name = new ValueObject\Name($ast->new);
+            $old_name = $this->make_name($ast->old, 'domain');
+            $entity_id = $this->domain_queryable->id($database_id, $old_name);
+            $name = $this->make_name($ast->new, 'domain');
             return new Domain\Command\Rename($id, $entity_id, $name);
         } 
         
         if ($ast->name == "DeleteDomain") {
-            $name = new ValueObject\Name($ast->value);
-            $entity_id = $this->get_domain_id($database_id, $name);
+            $name = $this->make_name($ast->value, 'domain');
+            $entity_id = $this->domain_queryable->id($database_id, $name);
             return new Domain\Command\Delete($id, $entity_id);
         } 
+    }
+    
+    private function make_name($name, $type)
+    {
+        if ($name == '') {
+            throw new \Exception("The $type name must not be blank.");
+        }
+        if (strlen($name) >= 128) {
+            throw new \Exception("The $type name must be fewer than 128 characters.");
+        }
+        try {
+            return new ValueObject\Name($name);
+        } catch (\Exception $ex) {
+            throw new \Exception("The $type name must contain a-z, 0-9, '.' and '-'.");
+        }
     }
     
     private function get_using_database_id($ast)
     {
         if ($ast->using) {
-            $name = new ValueObject\Name($ast->using);
-            $id = $this->get_database_id($name);
+            $name = $this->make_name($ast->using, 'database');
+            $id = $this->database_queryable->id($name);
             return $id;
         }
-        $selected_database_id = $this->fetch_selected_database_id();
+        $selected_database_id = $this->fetch_key('database');
         if ($selected_database_id) {
             return $selected_database_id;
         }        
         throw new \Exception("No database selected");
     }
     
-    private function make_error_from_ast_and_invariant_exception($ast, $ex) 
+    
+    private function domain_error_translation($ast, $ex) 
     {
         $error_msg = $ex->getMessage();
         if (strpos($error_msg, "NameAlreadyInUse") !== false) {
             if ($ast->name == "CreateDatabase") {
-                $error_msg = "The database '".$ast->value."' already exists.";
+                $error_msg = "The database name '".$ast->value."' already exists.";
             }
             if ($ast->name == "RenameDatabase") {
-                $error_msg = "The database '".$ast->new."' already exists.";
+                $error_msg = "The database name '".$ast->new."' already exists.";
             } 
             if ($ast->name == "CreateDomain") {
-                $error_msg = "The domain '".$ast->value."' already exists.";
+                $error_msg = "The domain name '".$ast->value."' already exists.";
+            }
+            if ($ast->name == "RenameDomain") {
+                $error_msg = "The domain name '".$ast->value."' already exists.";
             }
             
         }
         return Response::create($error_msg, 400);
-    }
-    
-    private function get_database_id($name)
-    {
-        return $this->database_queryable->id($name);
-    }
-    
-    private function get_domain_id(Uuid $database_id, $name)
-    {
-        return $this->domain_queryable->id($database_id, $name);
     }
 }

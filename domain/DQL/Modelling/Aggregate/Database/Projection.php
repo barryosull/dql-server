@@ -3,30 +3,29 @@
 use BoundedContext\Contracts\Projection\Projection as ProjectionContract;
 use BoundedContext\Contracts\Projection\Queryable as QueryableContract;
 use BoundedContext\Sourced\Aggregate\State\AbstractProjection;
-use EventSourced\ValueObject\ValueObject\Boolean;
 use Domain\DQL\Modelling\ValueObject\Name;
+use Domain\DQL\Modelling\Entity\Database;
+use EventSourced\ValueObject\ValueObject\Uuid;
 
 class Projection extends AbstractProjection implements ProjectionContract, QueryableContract
 {
-    /** @var \EventSourced\ValueObject\ValueObject\Boolean */
-    public $is_created;
-    
-    /** @var \Domain\DQL\Modelling\ValueObject\Name */
-    public $name;
-
-    public function __construct()
+    public function create(Uuid $id, Name $name)
     {
-        $this->is_created = new Boolean(false);
-    }
-
-    public function create(Name $name)
-    {
-        $this->name = $name;
-        $this->is_created = new Boolean(true);
+        $this->root_entity = new Database($id, $name);
     }
         
     public function rename(Name $name)
     {
-        $this->name = $name;
+        $this->root_entity->name = $name;
+    }
+    
+    public function is_created()
+    {
+        return ($this->root_entity);
+    }
+    
+    public function name()
+    {
+        return $this->root_entity->name;
     }
 }

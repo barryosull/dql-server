@@ -1,6 +1,6 @@
 <?php namespace App\CommandStore;
 
-use Ramsey\Uuid\Uuid;
+use Rhumsaa\Uuid\Uuid;
 
 class IDGenerator
 {

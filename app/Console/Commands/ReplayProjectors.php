@@ -28,9 +28,14 @@ class ReplayProjectors extends Command
      */
     public function handle(PlayerBuilder $player_builder)
     {
-        $players = $player_builder->all()->get();
-        $players->reset();
-        $players->play();
-        $this->line("Projectors replayed successfully");
+        try {
+            $players = $player_builder->all()->get();
+            $players->reset();
+            $players->play();
+            $this->line("Projectors replayed successfully");
+        } catch (\ErrorException $ex) {
+            $this->error($ex->getMessage());
+            $this->error($ex->getFile().": ".$ex->getLine());
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php namespace App\DQLServer;
 
-use Ramsey\Uuid\Uuid;
+use Rhumsaa\Uuid\Uuid;
 use DateTime;
 
 class Command 

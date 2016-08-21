@@ -11,10 +11,10 @@ class PegJSParserTest extends TestCase
     
     public function test_parse_create_environment()
     {       
-        $dql_statement = "create environment 'test';";
+        $dql_statement = "create database 'test';";
         $ast = json_decode('{
             "type": "command",
-            "name": "CreateEnvironment",
+            "name": "CreateDatabase",
             "value": "test"
         }');
                 
@@ -46,7 +46,7 @@ class PegJSParserTest extends TestCase
 
         touch(base_path("infrastructure/app/DQLParser/PHPPegJS/PegJSGrammar.pegjs"));
         
-        $dql_statement = "create environment 'test';";
+        $dql_statement = "create database 'test';";
  
         try {
             $parser->parse($dql_statement);

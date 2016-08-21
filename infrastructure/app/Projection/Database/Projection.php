@@ -2,7 +2,6 @@
 
 use BoundedContext\Laravel\Illuminate\Projection\AbstractProjection;
 use App\Projection\Database;
-use Domain\DQL\Modelling\ValueObject\Name;
 
 class Projection extends AbstractProjection implements Database\Projection
 {
@@ -11,18 +10,18 @@ class Projection extends AbstractProjection implements Database\Projection
     /** @var Queryable $queryable */
     protected $queryable;
 
-    public function set_name(\EventSourced\ValueObject\ValueObject\Uuid $id, Name $name)
+    public function set_name($id, $name)
     {
         $this->delete($id);
         
         $this->query()->insert([
-            'id' => $id->value(),
-            'name' => $name->value()
+            'id' => $id,
+            'name' => $name
         ]);
     }
 
-    public function delete(\EventSourced\ValueObject\ValueObject\Uuid $id)
+    public function delete($id)
     {
-        $this->query()->where('id', '=', $id->value())->delete();
+        $this->query()->where('id', '=', $id)->delete();
     }
 }

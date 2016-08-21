@@ -1,4 +1,4 @@
-<?php namespace Domain\DQL\Modelling\ValueObject;
+<?php namespace Domain\DQL\Modelling\Entity;
 
 use EventSourced\ValueObject\ValueObject\Type\AbstractEntity;
 use EventSourced\ValueObject\ValueObject\Uuid;

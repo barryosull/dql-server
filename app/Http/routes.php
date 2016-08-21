@@ -27,4 +27,4 @@ Route::get('dql/command-form', function(){
 
 Route::post('dql/command-dispatch', 'DQLController@command_dispatch');
 
-Route::post('api/command', 'ClientController@command');
+Route::post('api/command', 'ClientController@statement');

@@ -1,6 +1,6 @@
 within aggregate 'carts':
 {
-  create event 'created' (shopper_id) as (identifier) handled by (
+  create event 'created' (shopper_id) as (value\id) handled by (
 		<:
 			update aggregate
 				set 'is_created' = true
@@ -18,5 +18,27 @@ within aggregate 'carts':
   create event 'empty';
 
   create event 'full';
+
+  create event 'product-added' (product) as (entity\product) handled by (
+    <:
+      update aggregate
+        add product to products
+    :>
+  );
+
+  create event 'product-quantity-changed' (product_id, quantity) as (value\id, value\quantity) handled by (
+    <:
+      update aggregate
+        where products.id = product
+          set products.quantity = quantity
+    :>
+  );
+
+  create event 'product-removed' (product_id) as (value\id) handled by (
+    <:
+      update aggregate
+        remove product_id from products
+    :>
+  );
 }
 

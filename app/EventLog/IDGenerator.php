@@ -1,6 +1,6 @@
 <?php namespace App\EventLog;
 
-use Ramsey\Uuid\Uuid;
+use Rhumsaa\Uuid\Uuid;
 
 class IDGenerator
 {

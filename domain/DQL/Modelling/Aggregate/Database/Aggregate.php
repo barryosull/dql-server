@@ -17,7 +17,7 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->assuming([$command->name])
             ->not()
             ->asserts();
-
+ 
         $this->apply(Event\Created::class,
             $command->name
         );
@@ -29,7 +29,7 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->asserts();
 
         $this->apply(Event\Deleted::class,
-            $this->state()->queryable()->name
+            $this->state()->queryable()->name()
         );
     }
     
@@ -44,7 +44,7 @@ class Aggregate extends AbstractAggregate implements \BoundedContext\Contracts\S
             ->asserts();
         
         $this->apply(Event\Renamed::class,
-            $this->state()->queryable()->name,
+            $this->state()->queryable()->name(),
             $command->name
         );
     }

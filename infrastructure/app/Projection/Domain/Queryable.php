@@ -18,7 +18,7 @@ class Queryable extends AbstractQueryable implements Domain\Queryable
         if ($row) {
             return new Uuid($row->domain_id);
         }
-        throw new Domain\Exception("There is no domain with the name '".$name->value()."'");
+        throw new Domain\Exception("The domain name '".$name->value()."' does not exist.");
     }
 
     public function names(Uuid $database_id)

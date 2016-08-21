@@ -2,14 +2,14 @@
 
 use BoundedContext\Sourced\Aggregate\State\AbstractState;
 
-class State extends AbstractState implements \BoundedContext\Contracts\Sourced\Aggregate\State\State
+class Projector extends AbstractState implements \BoundedContext\Contracts\Sourced\Aggregate\State\State
 {
     protected function when_dql_modelling_database_created(
         Projection $projection,
         Event\Created $event
     )
     {
-        $projection->create($event->name);
+        $projection->create($this->aggregate_id, $event->name);
     }
     
     protected function when_dql_modelling_database_renamed(

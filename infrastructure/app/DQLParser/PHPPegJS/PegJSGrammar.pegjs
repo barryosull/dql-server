@@ -1,98 +1,170 @@
 
-Command = CreateDatabase / DeleteDatabase / RenameDatabase / UsingDatabase / ShowDatabases / CreateDomain / DeleteDomain / RenameDomain / ShowDomains
+Command = DatabaseCommand / DomainCommand / ContextCommand
+
+DatabaseCommand = command:PartialDatabaseCommand _ ";" _
+  {
+    return $command;
+  }
+
+PartialDatabaseCommand = CreateDatabase / DeleteDatabase / RenameDatabase / ShowDatabases / UsingDatabase
 
 /* Databases */
-CreateDatabase = _ "create"i _ "database"i _ value:QuotedName _ ";" _
+CreateDatabase = _ "create"i _ "database"i _ value:QuotedName 
   {
     return [
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'CreateDatabase',
       'value' => $value
     ];
   }
 
-DeleteDatabase = _ "delete"i _ "database"i _ value:QuotedName _ ";" _
+DeleteDatabase = _ "delete"i _ "database"i _ value:QuotedName 
   {
     return [
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'DeleteDatabase',
       'value' => $value
     ];
   }
 
-RenameDatabase = _ "rename"i _ "database"i _ old:QuotedName _ "to"i _ new:QuotedName _ ";" _
+RenameDatabase = _ "rename"i _ "database"i _ old:QuotedName _ "to"i _ new:QuotedName
   {
     return [
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'RenameDatabase',
       'old' => $old,
       'new' => $new
     ];
   }
 
-UsingDatabase = _ "using"i _ "database"i _ value:QuotedName _ ";" _
+UsingDatabase = _ "using"i _ "database"i _ value:QuotedName 
   {
     return [
-      'type' => 'modeling',
+      'type' => 'controllerCommand',
       'name' => 'UsingDatabase',
       'value' => $value
     ];
   }
 
-ShowDatabases = _ "show"i _ "databases"i _ ";" _
+ShowDatabases = _ "show"i _ "databases"i
   {
     return [
-      'type' => 'modeling',
+      'type' => 'query',
       'name' => 'ShowDatabases'
     ];
   }
 
 /* Domains */
 
-CreateDomain = _ "create"i _ "domain"i _ value:QuotedName using:Using? ";" _
+DomainCommand = command:PartialDomainCommand using:UsingDatabase? _ ";" _
+  {
+    $command['using'] = isset($using) ? $using['value'] : null; 
+    return $command;
+  }
+
+PartialDomainCommand = CreateDomain / DeleteDomain / RenameDomain / ShowDomains/ ForDomain
+
+CreateDomain = _ "create"i _ "domain"i _ value:QuotedName
   {
     return [
-      'using' => $using,
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'CreateDomain',
       'value' => $value
     ];
   }
 
-DeleteDomain = _ "delete"i _ "domain"i _ value:QuotedName using:Using? ";" _
+DeleteDomain = _ "delete"i _ "domain"i _ value:QuotedName
   {
     return [
-      'using' => $using,
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'DeleteDomain',
       'value' => $value
     ];
   }
 
-RenameDomain = _ "rename"i _ "domain"i _ old:QuotedName _ "to"i _ new:QuotedName using:Using? ";" _
+RenameDomain = _ "rename"i _ "domain"i _ old:QuotedName _ "to"i _ new:QuotedName
   {
     return [
-      'using' => $using,
-      'type' => 'modeling',
+      'type' => 'command',
       'name' => 'RenameDomain',
       'old' => $old,
       'new' => $new
     ];
   }
 
-ShowDomains = _ "show"i _ "domains"i using:Using? ";" _
+ShowDomains = _ "show"i _ "domains"i 
   {
     return [
-      'using' => $using,
-      'type' => 'modeling',
+      'type' => 'query',
       'name' => 'ShowDomains'
     ];
   }
 
-Using = _ "using"i _ "database"i _ name:QuotedName _
+ForDomain = _ "for"i _ "domain"i _ value:QuotedName
   {
-    return $name; 
+    return [
+      'type' => 'controllerCommand',
+      'name' => 'ForDomain',
+      'value' => $value
+    ];
   }
+
+/** Context commands */
+
+ContextCommand = command:PartialContextCommand for:ForDomain using:UsingDatabase? _ ";" _
+  {
+    $command['using'] = isset($using) ? $using['value'] : null; 
+    $command['for'] = isset($for) ? $for['value'] : null; 
+    return $command;
+  }
+
+PartialContextCommand = CreateContext / DeleteContext / RenameContext / ShowContext/ InContext
+
+CreateContext = _ "create"i _ "context"i _ value:QuotedName
+  {
+    return [
+      'type' => 'command',
+      'name' => 'CreateContext',
+      'value' => $value
+    ];
+  }
+
+DeleteContext = _ "delete"i _ "context"i _ value:QuotedName
+  {
+    return [
+      'type' => 'command',
+      'name' => 'DeleteContext',
+      'value' => $value
+    ];
+  }
+
+RenameContext = _ "rename"i _ "context"i _ old:QuotedName _ "to"i _ new:QuotedName
+  {
+    return [
+      'type' => 'command',
+      'name' => 'RenameContext',
+      'old' => $old,
+      'new' => $new
+    ];
+  }
+
+ShowContext = _ "show"i _ "contexts"i 
+  {
+    return [
+      'type' => 'query',
+      'name' => 'ShowContext'
+    ];
+  }
+
+InContext = _ "in"i _ "context"i _ value:QuotedName
+  {
+    return [
+      'type' => 'controllerCommand',
+      'name' => 'InContext',
+      'value' => $value
+    ];
+  }
+
 
 QuotedName = SingleQuotedName / DoubleQuotedName
 
@@ -106,7 +178,7 @@ DoubleQuotedName = "\"" name:Name "\""
     return $name;
   }
 
-Name = name:[A-Za-z0-9_-]+
+Name = name:[A-Za-z0-9 ,_.-]*
   {
     return implode("", $name);
   }

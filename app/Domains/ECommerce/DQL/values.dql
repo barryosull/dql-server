@@ -7,7 +7,7 @@ create value 'id' validated by (
 
 create value 'quantity' validated by (
 	<:
-		check value > 0
+		check is between 0,20
 	:>
 );
 

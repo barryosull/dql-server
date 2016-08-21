@@ -2,7 +2,6 @@
 
 use BoundedContext\Laravel\Illuminate\Projection\AbstractProjection;
 use Domain\DQL\Modelling\Aggregate\Database\Projection\NameAlreadyInUse;
-use Domain\DQL\Modelling\ValueObject\Name;
 
 class Projection extends AbstractProjection implements NameAlreadyInUse\Projection
 {
@@ -11,26 +10,26 @@ class Projection extends AbstractProjection implements NameAlreadyInUse\Projecti
     /** @var Queryable $queryable */
     protected $queryable;
     
-    public function create(Name $name) 
+    public function create(string $name) 
     {
         $this->query()->insert([
-            'name' => $name->value()
+            'name' => $name
         ]);
     }
 
-    public function rename(Name $previous_name, Name $name)
+    public function rename(string $previous_name, string $name)
     {
         $this->delete($previous_name);
         
         $this->query()->insert([
-            'name' => $name->value()
+            'name' => $name
         ]);
     }
 
-    public function delete(Name $name)
+    public function delete(string $name)
     {
         $this->query()->where([
-            'name' => $name->value()
+            'name' => $name
         ])->delete();
     }
 }

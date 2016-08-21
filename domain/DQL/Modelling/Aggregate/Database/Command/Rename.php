@@ -10,9 +10,9 @@ class Rename extends AbstractCommand implements Command
 {
     public $name;
 
-    public function __construct(Uuid $id, Uuid $entity_id, Name $name)
+    public function __construct(Uuid $id, Uuid $database_id, Name $name)
     {
-        parent::__construct($id, $entity_id);
+        parent::__construct($id, $database_id);
 
         $this->name = $name;
     }
