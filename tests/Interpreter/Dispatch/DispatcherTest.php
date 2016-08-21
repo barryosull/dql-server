@@ -9,6 +9,7 @@ class DispatcherTest extends \Test\Interpreter\TestCase
     private $dispatcher;
     private $event_log;
     private $command_store;
+    private $root_entity_store;
     private $command_id;
 
     public function setUp()
@@ -19,6 +20,7 @@ class DispatcherTest extends \Test\Interpreter\TestCase
         $this->event_log->clear();
         
         $this->command_store = $this->app->make(\App\Interpreter\CommandStore::class);
+        $this->root_entity_store = $this->app->make(\App\Interpreter\RootEntityStore::class);
         
         $this->dispatcher = $this->app->make(Dispatch\Dispatcher::class);
                 
@@ -67,5 +69,10 @@ class DispatcherTest extends \Test\Interpreter\TestCase
     public function test_dispatcher_stores_command_on_success()
     {
         $this->assertEquals([$this->command], $this->command_store->fetch_all());
+    }
+    
+    public function test_that_root_entity_is_stored()
+    {
+        $this->assertTrue(is_object($this->root_entity_store->get_stored_test_entity()));
     }
 }
