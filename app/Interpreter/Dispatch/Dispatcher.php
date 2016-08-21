@@ -4,6 +4,7 @@ use App\Interpreter\Handler;
 use App\Interpreter\Aggregate;
 use App\Interpreter\EventLog;
 use App\Interpreter\CommandStore;
+use App\Interpreter\RootEntityStore;
 
 class Dispatcher
 {
@@ -11,19 +12,22 @@ class Dispatcher
     private $aggregate_root_builder;
     private $event_log;
     private $command_store;
+    private $root_entity_store;
     private $root_entity;
     
     public function __construct( 
         Handler\Handler $handler,
         Aggregate\Aggregate $aggregate_root_builder,
         EventLog $event_log,
-        CommandStore $command_store
+        CommandStore $command_store,
+        RootEntityStore $root_entity_store
     )
     {
         $this->handler = $handler;
         $this->aggregate_root_builder = $aggregate_root_builder;
         $this->event_log = $event_log;
         $this->command_store = $command_store;
+        $this->root_entity_store = $root_entity_store;
     }
         
     public function dispatch($command)
@@ -32,6 +36,7 @@ class Dispatcher
 
         $this->event_log->store($events);
         $this->command_store->store([$command]);
+        $this->root_entity_store->store($this->root_entity);
         
         return $events;
     }

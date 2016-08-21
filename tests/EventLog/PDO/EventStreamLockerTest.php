@@ -8,7 +8,7 @@ class EventStreamLockerTest extends AbstractEventStreamLockerTest
 {    
     protected function make_locker(DateTimeGenerator $stub_datetime_generator)
     {
-        $this->artisan('migrate');
+        $this->artisan('migrate', ['--path'=>'database/migrations/sqlite']);
         return new EventStreamLocker(self::$pdo, $stub_datetime_generator);
     }
 }

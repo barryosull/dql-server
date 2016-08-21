@@ -7,7 +7,7 @@ class CommandRepositoryTest extends AbstractCommandRepositoryTest
 {    
     protected function build_repository()
     {
-        $this->artisan('migrate');
+        $this->artisan('migrate', ['--path'=>'database/migrations/sqlite']);
         return new CommandRepository(self::$pdo, $this->builder);
     }
     

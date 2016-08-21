@@ -13,5 +13,6 @@ class TestCase extends \Test\TestCase
         $this->app->bind(\App\Interpreter\AstRepository::class, Fake\AstRepository::class);     
         $this->app->bind(\App\Interpreter\EventLog::class, Fake\EventLog::class);
         $this->app->bind(\App\Interpreter\CommandStore::class, Fake\CommandStore::class);
+        $this->app->bind(\App\Interpreter\RootEntityStore::class, Fake\RootEntityStore::class);
     }
 }

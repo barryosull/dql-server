@@ -7,7 +7,7 @@ class EventRepositoryTest extends AbstractEventRepositoryTest
 {    
     protected function build_event_repository()
     {
-        $this->artisan('migrate');
+        $this->artisan('migrate', ['--path'=>'database/migrations/sqlite']);
         return new EventRepository(self::$pdo, $this->event_builder);
     }
     
