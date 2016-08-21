@@ -52,3 +52,4 @@ class SQLFactory
         return "$ast->field $comparator?";
     }
 }
+
