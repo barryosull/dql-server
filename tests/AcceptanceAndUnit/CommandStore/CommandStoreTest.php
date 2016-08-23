@@ -6,16 +6,16 @@ use App\CommandStore\CommandStreamFactory;
 
 class CommandStoreTest extends \Test\TestCase 
 {
-    private $stub_command_repo;
+    private $mock_command_repo;
     private $stub_command_stream_factory;
     private $command_store;
     
     public function setUp()
     {
-        $this->stub_command_repo = $this->mock(CommandRepository::class);
+        $this->mock_command_repo = $this->mock(CommandRepository::class);
         $this->stub_command_stream_factory = $this->stub(CommandStreamFactory::class);
         $this->command_store = new CommandStore(
-            $this->stub_command_repo->reveal(), 
+            $this->mock_command_repo->reveal(), 
             $this->stub_command_stream_factory->reveal()
         );
     }
@@ -24,7 +24,7 @@ class CommandStoreTest extends \Test\TestCase
     {
         $data = ['data'];
         
-        $this->stub_command_repo->store($data)
+        $this->mock_command_repo->store($data)
             ->shouldBeCalled();
 
         $this->command_store->store($data);
@@ -35,7 +35,7 @@ class CommandStoreTest extends \Test\TestCase
         $stream = 'stream';
         $this->stub_command_stream_factory->all()
              ->willReturn($stream);
-        
+         
         $this->assertEquals($stream, $this->command_store->all());
     }
 }
