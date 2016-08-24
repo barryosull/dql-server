@@ -1,8 +1,8 @@
 <?php namespace App\Interpreter\Query;
 
-class NullInterpreter
+class NullInterpreter implements Interpreter
 {   
-    public function query($root)
+    public function query($root, $parameters)
     {        
         return $root;
     }

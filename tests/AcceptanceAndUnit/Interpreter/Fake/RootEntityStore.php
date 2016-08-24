@@ -4,7 +4,7 @@ class RootEntityStore implements \App\Interpreter\RootEntityStore
 {
     private static $root_entity;
     
-    public function store($root_entity)
+    public function store($aggregate_type_id, $root_entity)
     {
         self::$root_entity = $root_entity;
     }

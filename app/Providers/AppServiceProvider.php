@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
         /** Querier **/
         $this->app->bind(
             \App\Interpreter\Query\Factory::class,
-            \App\Interpreter\Query\LaravelFactory::class
+                \App\Interpreter\Query\Mongo\Factory::class
         );
         
 

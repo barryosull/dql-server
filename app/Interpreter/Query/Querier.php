@@ -21,6 +21,10 @@ class Querier
     public function query($id, $root, $parameters)
     {
         $ast = $this->repo->fetch($id);
+        
+        if (!$ast->query) {
+            return (new NullInterpreter())->query($root, $parameters);
+        }
 
         $querier = $this->factory->ast($ast);
         

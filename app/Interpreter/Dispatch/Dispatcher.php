@@ -36,7 +36,9 @@ class Dispatcher
 
         $this->event_log->store($events);
         $this->command_store->store([$command]);
-        $this->root_entity_store->store($this->root_entity);
+        
+        $aggregate_type = $command->schema->aggregate_id;
+        $this->root_entity_store->store($aggregate_type, $this->root_entity);
         
         return $events;
     }

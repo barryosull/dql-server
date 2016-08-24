@@ -33,21 +33,48 @@ class ReducerQueryTest extends \Test\TestCase
     public function test_reducing_a_data_set()
     {
         $query = [
-            ['$match' => [
-                'price.amount' => [
-                    '$lt' => 25,
-                ],
-                'price.currency' => 'eur'
-            ]],
-            ['$group' => [
-                '_id' => null,
-                'game_count' => ['$sum' => 1]
-            ]]
+            [
+                '$match' => [
+                    'price.amount' => [
+                        '$lt' => 25,
+                    ],
+                    'price.currency' => 'eur'
+                ]
+            ],
+            [
+                '$group' => [
+                    '_id' => null,
+                    'game_count' => ['$sum' => 1]
+                ]
+            ]
         ];
         
         $result = $this->game_collection->aggregate($query)->toArray();
         
         $this->assertEquals(2, $result[0]->game_count);
+    }
+    
+    public function test_no_results_in_reduction()
+    {
+        $query = [
+            [
+                '$match' => [
+                    'price.amount' => [
+                        '$lt' => 5,
+                    ],
+                    'price.currency' => 'eur'
+                ]
+            ],
+            [
+                '$group' => [
+                    '_id' => null,
+                    'game_count' => ['$sum' => 1]
+                ]
+            ]
+        ];
+        
+        $result = $this->game_collection->aggregate($query)->toArray();
+        $this->assertEmpty($result);
     }
 }
 

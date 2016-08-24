@@ -2,7 +2,5 @@
 
 interface RootEntityStore
 {    
-    public function store($root_entity);
-    
-    public function run_query($query_ast);
+    public function store($aggregate_type_id, $root_entity);
 }

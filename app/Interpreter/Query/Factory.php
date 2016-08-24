@@ -1,6 +1,6 @@
 <?php namespace App\Interpreter\Query;
 
-interface Factory 
-{       
+interface Factory
+{
     public function ast($ast);
 }
