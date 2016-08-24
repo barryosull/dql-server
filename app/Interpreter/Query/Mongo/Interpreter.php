@@ -50,9 +50,25 @@ class Interpreter implements \App\Interpreter\Query\Interpreter
         $wheres = [];
         foreach ($ast as $where_ast) {
             $value = $this->get_value($where_ast->value, $root, $parameters);
-            $wheres[$where_ast->field] = $value;
+            $field = $where_ast->field;
+            $comparator = $where_ast->comparator;
+            $wheres[$field] = $this->make_comparator($comparator, $value);
         }
         return $wheres;
+    }
+    
+    private function make_comparator($comparator, $value)
+    {
+        switch ($comparator) {
+            case "=":
+                return $value;
+            case "!=":
+                return ['$ne'=>$value];
+            case ">":
+                return ['$gt'=>$value];
+            case "<":
+                return ['$lt'=>$value];
+        }
     }
     
     private function make_group($ast)
