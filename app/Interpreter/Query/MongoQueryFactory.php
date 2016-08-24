@@ -1,6 +1,6 @@
 <?php namespace App\Interpreter\Query;
 
-class MongoFactory
+class MongoQueryFactory
 {
     public function ast($ast)
     {
@@ -18,8 +18,8 @@ class MongoFactory
     private function make_query($ast)
     {
         return [
-            '$match'=>$this->make_match($ast->query->where),
-            '$group'=>$this->make_group($ast->query->select)
+            ['$match'=>$this->make_match($ast->query->where)],
+            ['$group'=>$this->make_group($ast->query->select)]
         ];
     }
     

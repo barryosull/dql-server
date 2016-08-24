@@ -1,16 +1,10 @@
 <?php namespace App\Interpreter\Query;
 
-use DB;
-
 class LaravelFactory implements Factory
-{       
-    private $pdo;
-    private $sql_factory;
-    
-    public function __construct(SQLFactory $sql_factory)
+{
+    public function __construct()
     {
-        $this->pdo =  DB::connection()->getPdo();
-        $this->sql_factory = $sql_factory;
+        
     }
     
     public function ast($ast)

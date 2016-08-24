@@ -30,24 +30,6 @@ class InterpreterTest extends \Test\AcceptanceAndUnit\Interpreter\TestCase
         return $invariant_factory->ast($ast);
     }
     
-    /** TODO: Fix test **/
-    
-    public function test_update_sets_the_value()
-    {
-        return;
-        
-        $this->update()->update($this->root);
-        $result = $this->invariant()->check($this->root);
-        $this->assertTrue($result);
-    }
-    
-    private function update()
-    {
-        $ast = $this->fake_ast_repo->event_handler();
-        $update_factory = $this->app->make(Update\Factory::class);
-        return $update_factory->ast($ast);
-    }
-    
     public function test_query_returns_false_for_different_shopper_id()
     {
         $this->root->shopper_id = 'c6955003-814c-4f55-b907-006d7563579b';

@@ -18,12 +18,12 @@ class Querier
         $this->repo->store($ast);
     }
     
-    public function query($id, $root)
+    public function query($id, $root, $parameters)
     {
         $ast = $this->repo->fetch($id);
 
         $querier = $this->factory->ast($ast);
         
-        return $querier->query($root);
+        return $querier->query($root, $parameters);
     }
 }

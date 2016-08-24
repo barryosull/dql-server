@@ -1,8 +1,19 @@
 within aggregate 'carts':
 {
-  create invariant 'created' satisfied by (
+  create invariant 'has_active_cart' satisfied by (
 		<:
 			from aggregate
+      select count(shopper_id_) as cart_count
+      where shopper_id = shopper_id
+        and is_created = true
+        and is_checked_out = false
+			check cart_count > 0
+		:>
+	);
+
+   create invariant 'created' satisfied by (
+		<:
+			from all
 			check is_created == true
 		:>
 	);

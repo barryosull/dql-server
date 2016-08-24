@@ -1,6 +1,6 @@
 <?php namespace Test\AcceptanceAndUnit\Interpreter\Projection\Query;
 
-use App\Interpreter\Query\MongoFactory;
+use App\Interpreter\Query\MongoQueryFactory;
 
 class MongoDBFactoryTest extends \Test\AcceptanceAndUnit\Interpreter\TestCase
 {
@@ -8,19 +8,20 @@ class MongoDBFactoryTest extends \Test\AcceptanceAndUnit\Interpreter\TestCase
     {
         $ast = $this->fake_ast_repo->invariant_projection();
         
-        $factory = new MongoFactory();
+        $factory = new MongoQueryFactory();
         
         $collection = 'aggregate_5e867d81_9e3f_4a33_9150_6f4b373ba74f';
         
         $query = [
-            '$match' => [
+            ['$match' => [
                 'shopper_id' => '?',
-                'is_created' => '?'
-            ],
-            '$group' => [
+                'is_created' => '?',
+                'is_checked_out' => '?'
+            ]],
+            ['$group' => [
                 '_id' =>'shopper_id',
                 'cart_count' => ['$sum' => 1]
-            ],
+            ]],
         ];
 
         $mongo_query = [

@@ -1,0 +1,33 @@
+id: f72e0fb5-510e-4bec-9aba-736910e38b7d
+aggregate_id: 5e867d81-9e3f-4a33-9150-6f4b373ba74f
+name: has_active_cart
+parameters: 
+  product_id: "a6a70ade-d3be-42ba-bf6d-c29d055e862e"
+query:
+  select:
+  - field: shopper_id
+    operation: count
+    alias: cart_count
+  where:
+  - field: shopper_id
+    comparator: "="
+    value:
+      property:
+      - shopper_id
+  - field: is_created
+    comparator: "="
+    value:
+      literal: true
+  - field: is_checked_out
+    comparator: "="
+    value:
+      literal: false
+check:
+  condition:
+  - value_left:
+      property:
+      - cart_count
+    comparator: ">"
+    value_right:
+      literal: 0
+
