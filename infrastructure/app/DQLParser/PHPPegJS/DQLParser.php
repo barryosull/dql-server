@@ -2,7 +2,7 @@
 
 use App\DQLParser\ParserError;
 
-class DQLParser implements \App\DQLParser\DQLParser
+class Parser implements \App\DQLParser\Parser
 {
     private $schema_path; 
     private $parser_path;
@@ -20,7 +20,8 @@ class DQLParser implements \App\DQLParser\DQLParser
     {
         $parser = $this->fetch_parser();
         try {
-            return $this->array_tree_to_object_tree($parser->parse($dql_statement));
+            $tree = $parser->parse($dql_statement);
+            return $this->array_tree_to_object_tree($tree);
         } catch (SyntaxError $ex) {
             $message = "Syntax error: " . $ex->getMessage() . ' At line ' . $ex->grammarLine . ' column ' . $ex->grammarColumn . ' offset ' . $ex->grammarOffset;
             throw new ParserError($message);

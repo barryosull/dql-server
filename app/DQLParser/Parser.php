@@ -1,6 +1,6 @@
 <?php namespace App\DQLParser;
 
-interface DQLParser 
+interface Parser
 {   
     public function parse($dql_statement);
 }

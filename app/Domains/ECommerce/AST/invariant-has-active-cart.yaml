@@ -14,10 +14,6 @@ query:
     value:
       property:
       - shopper_id
-  - field: is_created
-    comparator: "="
-    value:
-      literal: true
   - field: is_checked_out
     comparator: "="
     value:

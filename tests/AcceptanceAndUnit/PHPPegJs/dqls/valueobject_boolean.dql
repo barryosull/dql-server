@@ -1,0 +1,6 @@
+create value 'id' validated by (
+	<:
+		check
+			value is boolType
+	:>
+);

@@ -1,0 +1,6 @@
+create value 'boolean' validated by (
+	<:
+		check
+			value > 0
+	:>
+);

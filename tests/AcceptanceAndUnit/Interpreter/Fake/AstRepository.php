@@ -10,7 +10,7 @@ class AstRepository implements \App\Interpreter\AstRepository
         return $this->load_ast($name);
     } 
         
-    protected function load_ast($ast_file)
+    public function load_ast($ast_file)
     {
         $file_path = $this->ast_path.'/'.$ast_file.".json";
         $full_file_path = base_path($file_path);

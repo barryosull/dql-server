@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            \App\DQLParser\DQLParser::class,
-            \Infrastructure\App\DQLParser\PHPPegJS\DQLParser::class
+            \App\DQLParser\Parser::class,
+            \Infrastructure\App\DQLParser\PHPPegJS\Parser::class
         );
         
         $this->app->bind(

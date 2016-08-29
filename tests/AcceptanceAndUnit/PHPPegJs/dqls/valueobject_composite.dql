@@ -1,0 +1,1 @@
+create value 'range' (min, max) as (value\quantity, value\quantity);

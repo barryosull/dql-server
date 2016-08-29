@@ -33,7 +33,7 @@ class ClientController extends Controller
     
     public function statement(
         Request $request, 
-        DQLParser\DQLParser $parser
+        DQLParser\Parser $parser
     ){
         $this->validate($request, ['statement' => 'required']);
 
